@@ -5,20 +5,20 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import com.jbrunton.inject.Container
+import com.jbrunton.inject.HasContainer
+import com.jbrunton.inject.inject
+import com.jbrunton.inject.injectViewModel
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.auth.AuthResultContract
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
-import com.pocketlearningapps.timeline.network.RetrofitServiceFactory
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
-    private val signInAdapter by lazy { GoogleSignInAdapter(application) }
+class MainActivity : AppCompatActivity(), HasContainer {
+    override val container by lazy { (application as HasContainer).container }
 
-    private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(
-            signInAdapter
-        )
-    }
+    private val signInAdapter: GoogleSignInAdapter by inject()
+    private val viewModel: MainViewModel by injectViewModel()
 
     private val signInLauncher by lazy {
         prepareCall(
@@ -29,8 +29,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        RetrofitServiceFactory.initialize(application)
 
         viewModel.signIn.observe(this, Observer { signInLauncher.launch(Unit) })
         viewModel.viewState.observe(this, Observer { updateViewState(it) })

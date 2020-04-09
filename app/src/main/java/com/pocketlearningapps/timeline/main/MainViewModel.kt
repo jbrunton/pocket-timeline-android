@@ -9,12 +9,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.pocketlearningapps.timeline.auth.AuthResult
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
+import com.pocketlearningapps.timeline.network.RetrofitService
 import com.pocketlearningapps.timeline.network.RetrofitServiceFactory
 import com.pocketlearningapps.timeline.network.UserResponse
 import com.pocketlearningapps.timeline.network.ValidateTokenRequest
 import kotlinx.coroutines.launch
 import java.lang.Exception
-import java.util.logging.Logger
 
 data class MainViewState(
     val name: String?,
@@ -23,7 +23,10 @@ data class MainViewState(
     val showSignOutButton: Boolean
 )
 
-class MainViewModel(val signInAdapter: GoogleSignInAdapter) : ViewModel() {
+class MainViewModel(
+    private val signInAdapter: GoogleSignInAdapter,
+    private val service: RetrofitService
+) : ViewModel() {
     val viewState = MutableLiveData<MainViewState>()
     val signIn = SingleLiveAction()
 
@@ -45,7 +48,6 @@ class MainViewModel(val signInAdapter: GoogleSignInAdapter) : ViewModel() {
     }
 
     private fun validateAccount(account: GoogleSignInAccount) {
-        val service = RetrofitServiceFactory.instance
         viewModelScope.launch {
             try {
                 val result = service.validateToken(ValidateTokenRequest(account.idToken))

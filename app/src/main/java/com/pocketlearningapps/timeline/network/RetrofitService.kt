@@ -8,6 +8,7 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
+import okhttp3.CookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -45,7 +46,10 @@ interface RetrofitService {
     suspend fun profile(): UserResponse
 }
 
-class RetrofitServiceFactory(private val context: Context) {
+class RetrofitServiceFactory(
+    private val context: Context,
+    private val cookieJar: CookieJar
+) {
     fun create(): RetrofitService {
         val client = OkHttpClient.Builder()
             .apply(::configureTimeout)
@@ -74,18 +78,6 @@ class RetrofitServiceFactory(private val context: Context) {
     }
 
     private fun configureCookies(builder: OkHttpClient.Builder) {
-        val cookieJar = PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
         builder.cookieJar(cookieJar)
-    }
-
-    companion object {
-        lateinit var instance: RetrofitService
-            private set
-
-        fun initialize(context: Context) {
-            if (!this::instance.isInitialized) {
-                instance = RetrofitServiceFactory(context).create()
-            }
-        }
     }
 }
