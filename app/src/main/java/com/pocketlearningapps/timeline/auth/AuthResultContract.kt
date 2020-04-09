@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 
 class AuthResultContract(val adapter: GoogleSignInAdapter)
@@ -23,7 +24,7 @@ class AuthResultContract(val adapter: GoogleSignInAdapter)
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("MainActivity", "signInResult:failed code=" + e.statusCode)
+            Log.w("MainActivity", "signInResult:failed code=" + GoogleSignInStatusCodes.getStatusCodeString(e.statusCode))
             AuthResult.NotSignedIn
         }
     }
