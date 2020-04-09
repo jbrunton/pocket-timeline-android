@@ -2,6 +2,7 @@ package com.pocketlearningapps.timeline.network
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
+import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,7 +13,7 @@ import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
 data class ValidateTokenRequest(
-    val id_token: String?
+    @SerializedName("id_token") val idToken: String?
 )
 
 interface RetrofitService {
