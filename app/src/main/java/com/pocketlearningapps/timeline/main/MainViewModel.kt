@@ -1,11 +1,19 @@
 package com.pocketlearningapps.timeline.main
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.pocketlearningapps.timeline.auth.AuthResult
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
+import com.pocketlearningapps.timeline.network.RetrofitServiceFactory
+import com.pocketlearningapps.timeline.network.ValidateTokenRequest
+import kotlinx.coroutines.launch
+import java.lang.Exception
+import java.util.logging.Logger
 
 data class MainViewState(
     val email: String?,
@@ -30,8 +38,22 @@ class MainViewModel(val signInAdapter: GoogleSignInAdapter) : ViewModel() {
     }
 
     fun onAuthResult(result: AuthResult) = when (result) {
-        is AuthResult.Success -> updateAccount(result.account)
+        is AuthResult.Success -> validateAccount(result.account)
         is AuthResult.NotSignedIn -> updateAccount(null)
+    }
+
+    private fun validateAccount(account: GoogleSignInAccount) {
+        val service = RetrofitServiceFactory().create()
+        viewModelScope.launch {
+            try {
+                val result = service.validateToken(ValidateTokenRequest(account.idToken))
+                Log.d(MainViewModel::class.java.simpleName, "result: " + result.toString())
+                updateAccount(account)
+            } catch (e: Exception) {
+                e.printStackTrace();
+            }
+
+        }
     }
 
     private fun updateAccount(account: GoogleSignInAccount?) {
