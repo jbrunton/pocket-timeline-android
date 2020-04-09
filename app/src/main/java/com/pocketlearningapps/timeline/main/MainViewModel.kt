@@ -10,12 +10,14 @@ import com.pocketlearningapps.timeline.auth.AuthResult
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.network.RetrofitServiceFactory
+import com.pocketlearningapps.timeline.network.UserResponse
 import com.pocketlearningapps.timeline.network.ValidateTokenRequest
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.logging.Logger
 
 data class MainViewState(
+    val name: String?,
     val email: String?,
     val showSignInButton: Boolean,
     val showSignOutButton: Boolean
@@ -26,7 +28,7 @@ class MainViewModel(val signInAdapter: GoogleSignInAdapter) : ViewModel() {
     val signIn = SingleLiveAction()
 
     init {
-        updateAccount(signInAdapter.lastSignedInAccount)
+        updateUser(null)
     }
 
     fun signInClicked() {
@@ -34,21 +36,22 @@ class MainViewModel(val signInAdapter: GoogleSignInAdapter) : ViewModel() {
     }
 
     fun signOutClicked() {
-        signInAdapter.signOut { updateAccount(null) }
+        signInAdapter.signOut { updateUser(null) }
     }
 
     fun onAuthResult(result: AuthResult) = when (result) {
         is AuthResult.Success -> validateAccount(result.account)
-        is AuthResult.NotSignedIn -> updateAccount(null)
+        is AuthResult.NotSignedIn -> updateUser(null)
     }
 
     private fun validateAccount(account: GoogleSignInAccount) {
-        val service = RetrofitServiceFactory().create()
+        val service = RetrofitServiceFactory.instance
         viewModelScope.launch {
             try {
                 val result = service.validateToken(ValidateTokenRequest(account.idToken))
+                val user = service.profile()
                 Log.d(MainViewModel::class.java.simpleName, "result: " + result.toString())
-                updateAccount(account)
+                updateUser(user)
             } catch (e: Exception) {
                 e.printStackTrace();
             }
@@ -56,16 +59,18 @@ class MainViewModel(val signInAdapter: GoogleSignInAdapter) : ViewModel() {
         }
     }
 
-    private fun updateAccount(account: GoogleSignInAccount?) {
-        val viewState = if (account != null) {
+    private fun updateUser(user: UserResponse?) {
+        val viewState = if (user != null) {
             MainViewState(
-                email = account.email,
+                email = user.email,
+                name = user.name,
                 showSignInButton = false,
                 showSignOutButton = true
             )
         } else {
             MainViewState(
                 email = null,
+                name = null,
                 showSignInButton = true,
                 showSignOutButton = false
             )

@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.auth.AuthResultContract
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
+import com.pocketlearningapps.timeline.network.RetrofitServiceFactory
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        RetrofitServiceFactory.initialize(application)
+
         viewModel.signIn.observe(this, Observer { signInLauncher.launch(Unit) })
         viewModel.viewState.observe(this, Observer { updateViewState(it) })
 
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateViewState(viewState: MainViewState) {
         email.text = viewState.email
+        name.text = viewState.name
         sign_in.isVisible = viewState.showSignInButton
         sign_out.isVisible = viewState.showSignOutButton
     }

@@ -1,5 +1,10 @@
 package com.pocketlearningapps.timeline.network
 
+import android.content.Context
+import com.franmontiel.persistentcookiejar.ClearableCookieJar
+import com.franmontiel.persistentcookiejar.PersistentCookieJar
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
@@ -8,12 +13,20 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
 
+
 data class ValidateTokenRequest(
     @SerializedName("id_token") val idToken: String?
+)
+
+data class UserResponse(
+    val id: String?,
+    val name: String?,
+    val email: String?
 )
 
 interface RetrofitService {
@@ -23,13 +36,21 @@ interface RetrofitService {
     )
     @POST("auth/google_oauth2/signin")
     suspend fun validateToken(@Body request: ValidateTokenRequest): JsonElement
+
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
+    @GET("user/profile")
+    suspend fun profile(): UserResponse
 }
 
-class RetrofitServiceFactory {
+class RetrofitServiceFactory(private val context: Context) {
     fun create(): RetrofitService {
         val client = OkHttpClient.Builder()
             .apply(::configureTimeout)
             .apply(::configureLogging)
+            .apply(::configureCookies)
             .build()
 
         return Retrofit.Builder()
@@ -50,5 +71,21 @@ class RetrofitServiceFactory {
         builder.addInterceptor(HttpLoggingInterceptor().apply {
             setLevel(HttpLoggingInterceptor.Level.BODY)
         })
+    }
+
+    private fun configureCookies(builder: OkHttpClient.Builder) {
+        val cookieJar = PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(context))
+        builder.cookieJar(cookieJar)
+    }
+
+    companion object {
+        lateinit var instance: RetrofitService
+            private set
+
+        fun initialize(context: Context) {
+            if (!this::instance.isInitialized) {
+                instance = RetrofitServiceFactory(context).create()
+            }
+        }
     }
 }
