@@ -7,6 +7,7 @@ import com.franmontiel.persistentcookiejar.cache.SetCookieCache
 import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
+import com.google.gson.annotations.SerializedName
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -19,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 
 data class ValidateTokenRequest(
-    val id_token: String?
+    @SerializedName("id_token") val idToken: String?
 )
 
 data class UserResponse(
