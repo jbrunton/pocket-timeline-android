@@ -9,11 +9,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes
 import com.google.android.gms.common.api.ApiException
 
-class AuthResultContract(val adapter: GoogleSignInAdapter)
+class AuthResultContract(private val adapter: GoogleSignInAdapter)
     : ActivityResultContract<Unit, AuthResult>()
 {
     override fun createIntent(context: Context, input: Unit?): Intent {
-        return adapter.signInClient.signInIntent
+        return adapter.signInIntent
     }
 
     override fun parseResult(resultCode: Int, intent: Intent?): AuthResult {

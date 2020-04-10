@@ -1,21 +1,15 @@
 package com.pocketlearningapps.timeline.di
 
-import android.content.Context
-import com.franmontiel.persistentcookiejar.PersistentCookieJar
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor
 import com.jbrunton.inject.module
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
+import com.pocketlearningapps.timeline.auth.SessionCookieJar
 import com.pocketlearningapps.timeline.network.RetrofitServiceFactory
-import okhttp3.CookieJar
 
 val HttpModule = module {
-    single<CookieJar> {
-        PersistentCookieJar(SetCookieCache(), SharedPrefsCookiePersistor(get<Context>()))
-    }
+    single { SessionCookieJar() }
 
-    single { RetrofitServiceFactory(get(), get()).create() }
+    single { RetrofitServiceFactory(get()).create() }
 
     // TODO: possibly move this to an AuthModule
-    single { GoogleSignInAdapter(get()) }
+    single { GoogleSignInAdapter(get(), get()) }
 }

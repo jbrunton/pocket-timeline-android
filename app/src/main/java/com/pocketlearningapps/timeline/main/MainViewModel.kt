@@ -1,7 +1,5 @@
 package com.pocketlearningapps.timeline.main
 
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,19 +7,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.pocketlearningapps.timeline.auth.AuthResult
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
+import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
-import com.pocketlearningapps.timeline.network.RetrofitServiceFactory
 import com.pocketlearningapps.timeline.network.UserResponse
 import com.pocketlearningapps.timeline.network.ValidateTokenRequest
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import java.lang.Exception
-
-data class MainViewState(
-    val name: String?,
-    val email: String?,
-    val showSignInButton: Boolean,
-    val showSignOutButton: Boolean
-)
 
 class MainViewModel(
     private val signInAdapter: GoogleSignInAdapter,
@@ -29,9 +21,12 @@ class MainViewModel(
 ) : ViewModel() {
     val viewState = MutableLiveData<MainViewState>()
     val signIn = SingleLiveAction()
+    val showErrorDialog = SingleLiveEvent<String>()
+
+    private val viewStateFactory = MainViewStateFactory()
 
     init {
-        updateUser(null)
+        refreshUser()
     }
 
     fun signInClicked() {
@@ -39,7 +34,9 @@ class MainViewModel(
     }
 
     fun signOutClicked() {
-        signInAdapter.signOut { updateUser(null) }
+        signInAdapter.signOut {
+            refreshUser()
+        }
     }
 
     fun onAuthResult(result: AuthResult) = when (result) {
@@ -47,36 +44,30 @@ class MainViewModel(
         is AuthResult.NotSignedIn -> updateUser(null)
     }
 
+    fun refreshUser() {
+        viewModelScope.launch {
+            try {
+                val user = service.profile()
+                updateUser(user)
+            } catch (e: HttpException) {
+                updateUser(null)
+            }
+        }
+    }
+
     private fun validateAccount(account: GoogleSignInAccount) {
         viewModelScope.launch {
             try {
-                val result = service.validateToken(ValidateTokenRequest(account.idToken))
-                val user = service.profile()
-                Log.d(MainViewModel::class.java.simpleName, "result: " + result.toString())
-                updateUser(user)
+                service.validateToken(ValidateTokenRequest(account.idToken))
+                refreshUser()
             } catch (e: Exception) {
-                e.printStackTrace();
+                e.printStackTrace()
+                showErrorDialog.postValue("Unable to verify token")
             }
-
         }
     }
 
     private fun updateUser(user: UserResponse?) {
-        val viewState = if (user != null) {
-            MainViewState(
-                email = user.email,
-                name = user.name,
-                showSignInButton = false,
-                showSignOutButton = true
-            )
-        } else {
-            MainViewState(
-                email = null,
-                name = null,
-                showSignInButton = true,
-                showSignOutButton = false
-            )
-        }
-        this.viewState.postValue(viewState)
+        this.viewState.postValue(viewStateFactory.viewState(user))
     }
 }
