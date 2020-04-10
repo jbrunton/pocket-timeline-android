@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.pocketlearningapps.timeline.auth.AuthResult
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
+import com.pocketlearningapps.timeline.auth.session.SessionManager
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
@@ -17,7 +18,8 @@ import java.lang.Exception
 
 class MainViewModel(
     private val signInAdapter: GoogleSignInAdapter,
-    private val service: RetrofitService
+    private val service: RetrofitService,
+    private val sessionManager: SessionManager
 ) : ViewModel() {
     val viewState = MutableLiveData<MainViewState>()
     val signIn = SingleLiveAction()
@@ -46,10 +48,14 @@ class MainViewModel(
 
     fun refreshUser() {
         viewModelScope.launch {
-            try {
-                val user = service.profile()
-                updateUser(user)
-            } catch (e: HttpException) {
+            if (sessionManager.hasSession) {
+                try {
+                    val user = service.profile()
+                    updateUser(user)
+                } catch (e: HttpException) {
+                    updateUser(null)
+                }
+            } else {
                 updateUser(null)
             }
         }

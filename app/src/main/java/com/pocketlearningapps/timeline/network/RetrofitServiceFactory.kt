@@ -1,7 +1,7 @@
 package com.pocketlearningapps.timeline.network
 
 import com.google.gson.GsonBuilder
-import com.pocketlearningapps.timeline.auth.SessionCookieJar
+import com.pocketlearningapps.timeline.auth.session.SessionCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
