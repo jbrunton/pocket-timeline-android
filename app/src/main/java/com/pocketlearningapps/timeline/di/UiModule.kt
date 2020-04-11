@@ -1,8 +1,14 @@
 package com.pocketlearningapps.timeline.di
 
 import com.jbrunton.inject.module
-import com.pocketlearningapps.timeline.main.MainViewModel
+import com.pocketlearningapps.timeline.ui.account.AccountViewModel
 
 val UiModule = module {
-    factory { MainViewModel(get(), get(), get()) }
+    factory {
+        AccountViewModel(
+            get(),
+            get(),
+            get()
+        )
+    }
 }

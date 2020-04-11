@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_quiz"
+        android:icon="@drawable/ic_question_answer_black_24dp"
+        android:title="@string/nav_title_quiz" />
+
+    <item
+        android:id="@+id/navigation_timelines"
+        android:icon="@drawable/ic_linear_scale_black_24dp"
+        android:title="@string/nav_title_timelines" />
+
+    <item
+        android:id="@+id/navigation_account"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="@string/nav_title_account" />
+
+</menu>
