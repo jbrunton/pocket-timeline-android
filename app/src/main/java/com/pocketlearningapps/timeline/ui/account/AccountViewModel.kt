@@ -1,4 +1,4 @@
-package com.pocketlearningapps.timeline.ui.main
+package com.pocketlearningapps.timeline.ui.account
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,11 +12,13 @@ import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
 import com.pocketlearningapps.timeline.network.UserResponse
 import com.pocketlearningapps.timeline.network.ValidateTokenRequest
+import com.pocketlearningapps.timeline.ui.main.MainViewState
+import com.pocketlearningapps.timeline.ui.main.MainViewStateFactory
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.lang.Exception
 
-class MainViewModel(
+class AccountViewModel(
     private val signInAdapter: GoogleSignInAdapter,
     private val service: RetrofitService,
     private val sessionManager: SessionManager
@@ -25,7 +27,8 @@ class MainViewModel(
     val signIn = SingleLiveAction()
     val showErrorDialog = SingleLiveEvent<String>()
 
-    private val viewStateFactory = MainViewStateFactory()
+    private val viewStateFactory =
+        MainViewStateFactory()
 
     init {
         refreshUser()

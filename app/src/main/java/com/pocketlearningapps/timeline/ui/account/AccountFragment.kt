@@ -1,6 +1,7 @@
 package com.pocketlearningapps.timeline.ui.account
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -11,7 +12,6 @@ import com.jbrunton.inject.injectViewModel
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.auth.AuthResultContract
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
-import com.pocketlearningapps.timeline.ui.main.MainViewModel
 import com.pocketlearningapps.timeline.ui.main.MainViewState
 import kotlinx.android.synthetic.main.fragment_account.*
 
@@ -19,7 +19,7 @@ class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
     override val container by lazy { (activity?.application as HasContainer).container }
 
     private val signInAdapter: GoogleSignInAdapter by inject()
-    private val viewModel: MainViewModel by injectViewModel()
+    private val viewModel: AccountViewModel by injectViewModel()
 
     private val signInLauncher by lazy {
         prepareCall(
@@ -33,6 +33,10 @@ class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
         viewModel.signIn.observe(this, Observer { signInLauncher.launch(Unit) })
         viewModel.viewState.observe(this, Observer { updateViewState(it) })
         viewModel.showErrorDialog.observe(this, Observer { showErrorDialog(it) })
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         sign_in.setOnClickListener { viewModel.signInClicked() }
         sign_out.setOnClickListener { viewModel.signOutClicked() }
