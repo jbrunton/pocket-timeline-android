@@ -5,6 +5,7 @@ import com.pocketlearningapps.timeline.entities.Timeline
 import java.time.LocalDate
 
 val sampleTimeline = Timeline(
+    id = "1",
     title = "World War 2",
     description = "Events of World War 2",
     events = listOf(

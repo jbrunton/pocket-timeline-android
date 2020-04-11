@@ -24,7 +24,11 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
             .inflate(R.layout.item_timeline, parent, false)
 
         view.setOnClickListener {
-            view.context.startActivity(Intent(view.context, TimelineActivity::class.java))
+            val id = it.tag as String
+            val intent = Intent(view.context, TimelineActivity::class.java).apply {
+                putExtra("TIMELINE_ID", id)
+            }
+            view.context.startActivity(intent)
         }
 
         return ViewHolder(view)
@@ -36,6 +40,7 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val timeline = data.get(position)
+        holder.itemView.tag = timeline.id
         holder.title.text = timeline.title
         holder.description.text = timeline.description
     }
