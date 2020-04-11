@@ -1,22 +1,22 @@
-package com.pocketlearningapps.timeline.main
+package com.pocketlearningapps.timeline.ui.account
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.jbrunton.inject.Container
 import com.jbrunton.inject.HasContainer
 import com.jbrunton.inject.inject
 import com.jbrunton.inject.injectViewModel
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.auth.AuthResultContract
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
-import kotlinx.android.synthetic.main.activity_main.*
+import com.pocketlearningapps.timeline.ui.main.MainViewModel
+import com.pocketlearningapps.timeline.ui.main.MainViewState
+import kotlinx.android.synthetic.main.fragment_account.*
 
-class MainActivity : AppCompatActivity(), HasContainer {
-    override val container by lazy { (application as HasContainer).container }
+class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
+    override val container by lazy { (activity?.application as HasContainer).container }
 
     private val signInAdapter: GoogleSignInAdapter by inject()
     private val viewModel: MainViewModel by injectViewModel()
@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity(), HasContainer {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         viewModel.signIn.observe(this, Observer { signInLauncher.launch(Unit) })
         viewModel.viewState.observe(this, Observer { updateViewState(it) })
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity(), HasContainer {
     }
 
     private fun showErrorDialog(message: String) {
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(requireActivity())
             .setMessage(message)
             .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
             .create()

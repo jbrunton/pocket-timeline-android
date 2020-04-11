@@ -1,4 +1,4 @@
-package com.pocketlearningapps.timeline.main
+package com.pocketlearningapps.timeline.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

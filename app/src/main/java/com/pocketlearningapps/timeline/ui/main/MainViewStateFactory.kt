@@ -1,4 +1,4 @@
-package com.pocketlearningapps.timeline.main
+package com.pocketlearningapps.timeline.ui.main
 
 import com.pocketlearningapps.timeline.network.UserResponse
 
