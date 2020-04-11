@@ -8,17 +8,17 @@
     android:layout_marginTop="8dp">
 
     <TextView
-        android:id="@+id/event_title"
+        android:id="@+id/timeline_title"
         style="@style/TextAppearance.MaterialComponents.Subtitle1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Germany invades Poland" />
+        tools:text="World War 2" />
 
     <TextView
-        android:id="@+id/event_date"
+        android:id="@+id/timeline_description"
         style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="1 September 1939" />
+        tools:text="Events of World War 2" />
 
 </LinearLayout>

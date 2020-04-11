@@ -3,6 +3,7 @@ package com.pocketlearningapps.timeline.ui.account
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -37,6 +38,8 @@ class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
         sign_in.setOnClickListener { viewModel.signInClicked() }
         sign_out.setOnClickListener { viewModel.signOutClicked() }

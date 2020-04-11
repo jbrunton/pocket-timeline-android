@@ -1,5 +1,6 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,13 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
-import kotlinx.android.synthetic.main.item_event.view.*
+import com.pocketlearningapps.timeline.entities.Timeline
 
+class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
+    private val data = mutableListOf<Timeline>()
 
-class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
-    private val data = mutableListOf<Event>()
-
-    fun setData(items: Collection<Event>) {
+    fun setData(items: Collection<Timeline>) {
         this.data.clear()
         this.data.addAll(items)
         notifyDataSetChanged()
@@ -21,9 +21,11 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_event, parent, false)
+            .inflate(R.layout.item_timeline, parent, false)
 
-        //view.setOnClickListener(clickListener)
+        view.setOnClickListener {
+            view.context.startActivity(Intent(view.context, TimelineActivity::class.java))
+        }
 
         return ViewHolder(view)
     }
@@ -33,15 +35,15 @@ class EventsAdapter : RecyclerView.Adapter<EventsAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val event = data.get(position)
-        holder.title.text = event.title
-        holder.date.text = event.date.toString()
+        val timeline = data.get(position)
+        holder.title.text = timeline.title
+        holder.description.text = timeline.description
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
-        val title: TextView = itemView.findViewById(R.id.event_title)
-        var date: TextView = itemView.findViewById(R.id.event_date)
+        val title: TextView = itemView.findViewById(R.id.timeline_title)
+        var description: TextView = itemView.findViewById(R.id.timeline_description)
     }
 }
