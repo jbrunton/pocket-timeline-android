@@ -6,6 +6,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
 class RetrofitServiceFactory(
@@ -18,14 +19,14 @@ class RetrofitServiceFactory(
             .apply(::configureCookies)
             .build()
 
+        val gson = GsonBuilder()
+            .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+            .create()
+
         return Retrofit.Builder()
             .client(client)
             .baseUrl("http://10.0.2.2:3000")
-            .addConverterFactory(
-                GsonConverterFactory.create(
-                    GsonBuilder().create()
-                )
-            )
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(RetrofitService::class.java)
     }
