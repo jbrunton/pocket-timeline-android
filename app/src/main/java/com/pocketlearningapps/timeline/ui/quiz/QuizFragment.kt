@@ -8,6 +8,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jbrunton.inject.*
 import com.pocketlearningapps.timeline.R
@@ -15,6 +17,7 @@ import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import kotlin.random.Random
 
 class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
@@ -30,12 +33,13 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         viewModel.showAlert.observe(viewLifecycleOwner, Observer { showAlert(it) })
 
         submit.setOnClickListener {
-            viewModel.onSubmitClicked(answer.text.toString(), which_event_options.selectedEventId)
+            viewModel.onSubmitClicked(date_input.date!!, which_event_options.selectedEventId)
         }
+        date_input.onChanged = viewModel::onDateChanged
     }
 
     private fun updateViewState(viewState: QuizViewState) {
-        answer.setText("")
+        //date_input.date = null
         question.text = viewState.question
         timeline_title.text = viewState.timelineTitle
 
@@ -44,6 +48,8 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
 
         which_event_options.isVisible = viewState.showWhichEventContent
         which_event_options.updateView(viewState.whichEventContent.options)
+
+        submit.isEnabled = viewState.submitEnabled
     }
 
     private fun showAlert(message: String) {

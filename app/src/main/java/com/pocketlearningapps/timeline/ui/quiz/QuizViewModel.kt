@@ -12,6 +12,7 @@ import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
@@ -29,7 +30,8 @@ data class QuizViewState(
     val showWhatDateContent: Boolean,
     val whatDateContent: WhatDateViewState,
     val showWhichEventContent: Boolean,
-    val whichEventContent: WhichEventViewState
+    val whichEventContent: WhichEventViewState,
+    val submitEnabled: Boolean
 )
 
 class QuizViewStateFactory {
@@ -42,7 +44,8 @@ class QuizViewStateFactory {
                 showWhatDateContent = true,
                 whatDateContent = WhatDateViewState(eventTitle = question.event.title),
                 showWhichEventContent = false,
-                whichEventContent = WhichEventViewState(emptyList())
+                whichEventContent = WhichEventViewState(emptyList()),
+                submitEnabled = false
             )
             is Question.WhichEventQuestion -> QuizViewState(
                 question = "Which of the following events occurred on\n${question.event.date.format(dateFormatter)}?",
@@ -50,7 +53,8 @@ class QuizViewStateFactory {
                 showWhatDateContent = false,
                 whatDateContent = WhatDateViewState(""),
                 showWhichEventContent = true,
-                whichEventContent = WhichEventViewState(question.options)
+                whichEventContent = WhichEventViewState(question.options),
+                submitEnabled = false
             )
         }
     }
@@ -77,7 +81,7 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         viewModelScope.launch {
             val timelineEvents = service.timeline(timeline.id).events
             val event = timelineEvents.get(Random.nextInt(timelineEvents.size))
-            question = if (Random.nextBoolean()) {
+            question = if (true /*Random.nextBoolean()*/) {
                 Question.WhatDateQuestion(timeline, event)
             } else {
                 Question.WhichEventQuestion(timeline, event, pickEventOptions(timelineEvents, event))
@@ -94,7 +98,7 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
             .plus(correctAnswer)
     }
 
-    fun onSubmitClicked(whatDateAnswer: String, whichEventAnswer: String?) {
+    fun onSubmitClicked(whatDateAnswer: LocalDate, whichEventAnswer: String?) {
         val answer = when (question) {
             is Question.WhatDateQuestion -> whatDateAnswer
             is Question.WhichEventQuestion -> whichEventAnswer ?: ""
@@ -103,6 +107,13 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
             showAlert.postValue("Correct!")
         } else {
             showAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
+        }
+    }
+
+    fun onDateChanged(day: Int?, month: Int?, year: Int?) {
+        if (question is Question.WhatDateQuestion) {
+            val validAnswer = day != null && month != null && year != null
+            viewState.postValue(viewState.value?.copy(submitEnabled = validAnswer))
         }
     }
 
