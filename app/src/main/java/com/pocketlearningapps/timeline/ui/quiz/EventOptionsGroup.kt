@@ -19,17 +19,20 @@ class EventOptionsGroup @JvmOverloads constructor(
     var selectedEventId: String? = null
 
     fun updateView(viewState: List<Event>) {
-        if (viewState.size != childCount) {
-            removeAllViews()
-            viewState.forEach { addOption(it) }
-        }
+        selectedEventId = null
+        removeAllViews()
+        viewState.forEach { addOption(it) }
     }
 
     private fun addOption(event: Event) {
         val view = RadioButton(context)
         view.text = event.title
         view.tag = event.id
-        view.setOnCheckedChangeListener { _, isChecked -> selectedEventId = event.id }
+        view.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                selectedEventId = event.id
+            }
+        }
         addView(view)
     }
 
