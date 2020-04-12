@@ -35,18 +35,4 @@ class EventOptionsGroup @JvmOverloads constructor(
         }
         addView(view)
     }
-
-//    inner class EventView(context: Context) : LinearLayout(context) {
-//        init {
-//            inflate(context, R.layout.dirty_car_categories_view, this)
-//        }
-//
-//        fun updateView(viewState: CategoryViewState) {
-//            categoryDescription.text = viewState.category.name
-//            categoryCheckbox.isChecked = viewState.isChecked
-//            categoryCheckbox.setOnCheckedChangeListener { _, isChecked ->
-//                listener.onCheckboxChanged(viewState.category.id, isChecked)
-//            }
-//        }
-//    }
 }

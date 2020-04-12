@@ -35,6 +35,7 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
     }
 
     private fun updateViewState(viewState: QuizViewState) {
+        answer.setText("")
         question.text = viewState.question
         timeline_title.text = viewState.timelineTitle
 

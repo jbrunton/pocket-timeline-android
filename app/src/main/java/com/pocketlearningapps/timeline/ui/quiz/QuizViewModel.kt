@@ -77,8 +77,11 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         viewModelScope.launch {
             val timelineEvents = service.timeline(timeline.id).events
             val event = timelineEvents.get(Random.nextInt(timelineEvents.size))
-            question = Question.WhichEventQuestion(timeline, event, pickEventOptions(timelineEvents, event))
-            //question = Question.WhatDateQuestion(timeline, event)
+            question = if (Random.nextBoolean()) {
+                Question.WhatDateQuestion(timeline, event)
+            } else {
+                Question.WhichEventQuestion(timeline, event, pickEventOptions(timelineEvents, event))
+            }
             viewState.postValue(viewStateFactory.viewState(question))
         }
     }
