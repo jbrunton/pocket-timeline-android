@@ -47,7 +47,9 @@ class QuizViewStateFactory {
 }
 
 class QuizViewModel(private val service: RetrofitService) : ViewModel() {
+    private lateinit var question: Question.WhatDateQuestion
     val viewState = MutableLiveData<QuizViewState>()
+    val showAlert = MutableLiveData<String>()
     private lateinit var timelines: List<Timeline>
     private val viewStateFactory = QuizViewStateFactory()
 
@@ -58,21 +60,26 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         }
     }
 
-    fun nextQuestion() {
+    private fun nextQuestion() {
         val timeline = timelines.get(Random.nextInt(timelines.size))
         viewModelScope.launch {
             val timelineEvents = service.timeline(timeline.id).events
             val event = timelineEvents.get(Random.nextInt(timelineEvents.size))
-            val question = Question.WhatDateQuestion(timeline, event)
+            question = Question.WhatDateQuestion(timeline, event)
             viewState.postValue(viewStateFactory.viewState(question))
         }
     }
 
-    fun onSubmitClicked() {
-
+    fun onSubmitClicked(answer: String) {
+        val correctAnswer = question.event.date.year.toString()
+        if (answer == correctAnswer) {
+            showAlert.postValue("Correct!")
+        } else {
+            showAlert.postValue("Incorrect. The answer was ${correctAnswer}")
+        }
     }
 
-    fun onCorrectAnswer() {
-
+    fun onDialogDismissed() {
+        nextQuestion()
     }
 }

@@ -2,11 +2,13 @@ package com.pocketlearningapps.timeline.ui.quiz
 
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jbrunton.inject.*
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Timeline
@@ -25,8 +27,9 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
         viewModel.viewState.observe(viewLifecycleOwner, Observer { updateViewState(it) })
+        viewModel.showAlert.observe(viewLifecycleOwner, Observer { showAlert(it) })
 
-        submit.setOnClickListener { viewModel.nextQuestion() }
+        submit.setOnClickListener { viewModel.onSubmitClicked(answer.text.toString()) }
     }
 
     private fun updateViewState(viewState: QuizViewState) {
@@ -37,6 +40,13 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         event_title.text = viewState.whatDateContent.eventTitle
 
         which_event_content.isVisible = viewState.showWhichEventContent
+    }
+
+    private fun showAlert(message: String) {
+        MaterialAlertDialogBuilder(activity)
+            .setMessage(message)
+            .setPositiveButton("OK", { _, _ -> viewModel.onDialogDismissed() })
+            .show()
     }
 }
 
