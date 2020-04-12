@@ -40,6 +40,11 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         event_title.text = viewState.whatDateContent.eventTitle
 
         which_event_content.isVisible = viewState.showWhichEventContent
+        if (viewState.whichEventContent.options.size >= 3) {
+            option_1.text = viewState.whichEventContent.options.get(0).title
+            option_2.text = viewState.whichEventContent.options.get(1).title
+            option_3.text = viewState.whichEventContent.options.get(2).title
+        }
     }
 
     private fun showAlert(message: String) {

@@ -42,12 +42,22 @@ class QuizViewStateFactory {
                 showWhichEventContent = false,
                 whichEventContent = WhichEventViewState(emptyList())
             )
+            is Question.WhichEventQuestion -> QuizViewState(
+                question = "Which of the following events occurred on ${question.event.date}?",
+                timelineTitle = question.timeline.title,
+                showWhatDateContent = false,
+                whatDateContent = WhatDateViewState(""),
+                showWhichEventContent = true,
+                whichEventContent = WhichEventViewState(question.options)
+            )
         }
     }
+
+
 }
 
 class QuizViewModel(private val service: RetrofitService) : ViewModel() {
-    private lateinit var question: Question.WhatDateQuestion
+    private lateinit var question: Question
     val viewState = MutableLiveData<QuizViewState>()
     val showAlert = MutableLiveData<String>()
     private lateinit var timelines: List<Timeline>
@@ -65,17 +75,25 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         viewModelScope.launch {
             val timelineEvents = service.timeline(timeline.id).events
             val event = timelineEvents.get(Random.nextInt(timelineEvents.size))
-            question = Question.WhatDateQuestion(timeline, event)
+            question = Question.WhichEventQuestion(timeline, event, pickEventOptions(timelineEvents, event))
+            //question = Question.WhatDateQuestion(timeline, event)
             viewState.postValue(viewStateFactory.viewState(question))
         }
     }
 
+    private fun pickEventOptions(events: List<Event>, correctAnswer: Event): List<Event> {
+        return events
+            .filter { it.id != correctAnswer.id }
+            .sortedBy { Random.nextInt() }
+            .take(2)
+            .plus(correctAnswer)
+    }
+
     fun onSubmitClicked(answer: String) {
-        val correctAnswer = question.event.date.year.toString()
-        if (answer == correctAnswer) {
+        if (question.validate(answer)) {
             showAlert.postValue("Correct!")
         } else {
-            showAlert.postValue("Incorrect. The answer was ${correctAnswer}")
+            showAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
         }
     }
 
