@@ -5,23 +5,24 @@ import com.pocketlearningapps.timeline.entities.Timeline
 import java.time.LocalDate
 
 sealed class Question {
+    abstract fun validate(answer: String): Boolean
+    abstract val correctAnswer: String
+
     data class WhatDateQuestion(
         val timeline: Timeline,
         val event: Event
-    ) : Question()
+    ) : Question() {
+        override fun validate(answer: String) = answer == correctAnswer
+        override val correctAnswer: String = event.date.year.toString()
+    }
 
     data class WhichEventQuestion(
         val timeline: Timeline,
         val event: Event,
-        val date: LocalDate,
         val options: List<Event>
-    )
+    ) : Question() {
+        override fun validate(answer: String) = answer == event.id
+        override val correctAnswer: String = event.title
+    }
 }
 
-fun Question.WhatDateQuestion.validate(year: String): Boolean {
-    return event.date.year.toString() == year
-}
-
-fun Question.WhichEventQuestion.validate(eventId: String): Boolean {
-    return event.id == eventId
-}

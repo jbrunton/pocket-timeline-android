@@ -29,17 +29,21 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { updateViewState(it) })
         viewModel.showAlert.observe(viewLifecycleOwner, Observer { showAlert(it) })
 
-        submit.setOnClickListener { viewModel.onSubmitClicked(answer.text.toString()) }
+        submit.setOnClickListener {
+            viewModel.onSubmitClicked(answer.text.toString(), which_event_options.selectedEventId)
+        }
     }
 
     private fun updateViewState(viewState: QuizViewState) {
+        answer.setText("")
         question.text = viewState.question
         timeline_title.text = viewState.timelineTitle
 
         what_date_content.isVisible = viewState.showWhatDateContent
         event_title.text = viewState.whatDateContent.eventTitle
 
-        which_event_content.isVisible = viewState.showWhichEventContent
+        which_event_options.isVisible = viewState.showWhichEventContent
+        which_event_options.updateView(viewState.whichEventContent.options)
     }
 
     private fun showAlert(message: String) {
