@@ -72,33 +72,11 @@
 
         </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/which_event_content"
+        <com.pocketlearningapps.timeline.ui.quiz.EventOptionsGroup
+            android:id="@+id/which_event_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/option_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                tools:text="Britain goes to war"/>
-
-            <RadioButton
-                android:id="@+id/option_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                tools:text="Germany invades Poland"/>
-
-            <RadioButton
-                android:id="@+id/option_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.MaterialComponents.Subtitle1"
-                tools:text="Pearl Habor"/>
-        </RadioGroup>
+            android:orientation="vertical" />
 
         <Button
             android:id="@+id/submit"

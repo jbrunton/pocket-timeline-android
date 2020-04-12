@@ -12,6 +12,7 @@ import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
 data class WhatDateViewState(
@@ -32,6 +33,7 @@ data class QuizViewState(
 )
 
 class QuizViewStateFactory {
+    private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
     fun viewState(question: Question): QuizViewState {
         return when (question) {
             is Question.WhatDateQuestion -> QuizViewState(
@@ -43,7 +45,7 @@ class QuizViewStateFactory {
                 whichEventContent = WhichEventViewState(emptyList())
             )
             is Question.WhichEventQuestion -> QuizViewState(
-                question = "Which of the following events occurred on ${question.event.date}?",
+                question = "Which of the following events occurred on\n${question.event.date.format(dateFormatter)}?",
                 timelineTitle = question.timeline.title,
                 showWhatDateContent = false,
                 whatDateContent = WhatDateViewState(""),
@@ -89,7 +91,11 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
             .plus(correctAnswer)
     }
 
-    fun onSubmitClicked(answer: String) {
+    fun onSubmitClicked(whatDateAnswer: String, whichEventAnswer: String?) {
+        val answer = when (question) {
+            is Question.WhatDateQuestion -> whatDateAnswer
+            is Question.WhichEventQuestion -> whichEventAnswer ?: ""
+        }
         if (question.validate(answer)) {
             showAlert.postValue("Correct!")
         } else {

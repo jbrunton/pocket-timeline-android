@@ -29,7 +29,9 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { updateViewState(it) })
         viewModel.showAlert.observe(viewLifecycleOwner, Observer { showAlert(it) })
 
-        submit.setOnClickListener { viewModel.onSubmitClicked(answer.text.toString()) }
+        submit.setOnClickListener {
+            viewModel.onSubmitClicked(answer.text.toString(), which_event_options.selectedEventId)
+        }
     }
 
     private fun updateViewState(viewState: QuizViewState) {
@@ -39,12 +41,8 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         what_date_content.isVisible = viewState.showWhatDateContent
         event_title.text = viewState.whatDateContent.eventTitle
 
-        which_event_content.isVisible = viewState.showWhichEventContent
-        if (viewState.whichEventContent.options.size >= 3) {
-            option_1.text = viewState.whichEventContent.options.get(0).title
-            option_2.text = viewState.whichEventContent.options.get(1).title
-            option_3.text = viewState.whichEventContent.options.get(2).title
-        }
+        which_event_options.isVisible = viewState.showWhichEventContent
+        which_event_options.updateView(viewState.whichEventContent.options)
     }
 
     private fun showAlert(message: String) {
