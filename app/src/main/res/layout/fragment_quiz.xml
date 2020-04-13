@@ -23,39 +23,36 @@
         android:layout_margin="@dimen/margin">
 
         <TextView
-            android:id="@+id/question"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
+            android:id="@+id/question_title"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="On what date did the following event occur?"
+            android:text="When did the following event occur in World War 2?"
             android:layout_marginBottom="@dimen/margin"
             />
 
         <TextView
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:id="@+id/timeline_title"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:id="@+id/question_details"
+            android:textColor="@color/colorPrimary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/question"
+            android:layout_below="@id/question_title"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_horizontal"
             android:layout_marginBottom="@dimen/margin"
-            tools:text="World War 2" />
+            tools:text="Germany invades Poland" />
 
         <LinearLayout
             android:id="@+id/what_date_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/timeline_title"
+            android:layout_below="@id/question_details"
+            android:layout_above="@id/submit"
             android:orientation="vertical"
-            android:gravity="center_horizontal">
-
-            <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline6"
-                android:id="@+id/event_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin"
-                tools:text="Germany invades Poland" />
+            android:gravity="center">
 
             <com.pocketlearningapps.timeline.lib.DateInput
                 android:id="@+id/date_input"
@@ -80,7 +77,9 @@
             android:id="@+id/which_event_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/timeline_title"
+            android:layout_below="@id/question_details"
+            android:layout_above="@id/submit"
+            android:gravity="center_vertical"
             android:orientation="vertical" />
 
         <Button

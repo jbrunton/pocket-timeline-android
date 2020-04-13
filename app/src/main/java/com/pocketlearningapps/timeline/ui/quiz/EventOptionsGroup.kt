@@ -2,9 +2,13 @@ package com.pocketlearningapps.timeline.ui.quiz
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import androidx.core.content.ContextCompat
+import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
 
 class EventOptionsGroup @JvmOverloads constructor(
@@ -26,7 +30,7 @@ class EventOptionsGroup @JvmOverloads constructor(
     }
 
     private fun addOption(event: Event) {
-        val view = RadioButton(context)
+        val view = LayoutInflater.from(context).inflate(R.layout.view_event_option, null) as RadioButton
         view.text = event.title
         view.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
