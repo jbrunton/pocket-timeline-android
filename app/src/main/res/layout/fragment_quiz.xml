@@ -60,6 +60,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin" />
 
+            <TextView
+                android:id="@+id/date_error"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:text="Please enter a valid date"
+                android:layout_marginBottom="@dimen/margin"/>
+
         </LinearLayout>
 
         <com.pocketlearningapps.timeline.ui.quiz.EventOptionsGroup
