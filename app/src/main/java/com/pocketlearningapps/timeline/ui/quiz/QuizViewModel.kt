@@ -137,6 +137,17 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         }
     }
 
+    fun onOptionSelected(selectedEventId: String) {
+        if (question is Question.WhichEventQuestion) {
+            with(viewState.value) {
+                this?.let {
+                    val newState = copy(submitEnabled = true)
+                    viewState.postValue(newState)
+                }
+            }
+        }
+    }
+
     fun onDateEntered(date: LocalDate?) {
         hideKeyboard.post()
         val valid = date != null

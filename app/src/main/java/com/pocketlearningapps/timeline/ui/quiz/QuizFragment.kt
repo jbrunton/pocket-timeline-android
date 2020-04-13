@@ -16,6 +16,8 @@ import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.lib.KeyboardHelper
 import com.pocketlearningapps.timeline.network.RetrofitService
+import com.snakydesign.livedataextensions.distinctUntilChanged
+import com.snakydesign.livedataextensions.map
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import kotlinx.android.synthetic.main.view_date_input.*
 import kotlinx.coroutines.launch
@@ -41,12 +43,16 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
             keyboardHelper.showKeyboard(date_input_day)
             date_input_day.requestFocus()
         })
+        viewModel.viewState.map { it.whichEventContent }
+            .distinctUntilChanged()
+            .observe(viewLifecycleOwner, Observer { updateWhichEventViewState(it) })
 
         submit.setOnClickListener {
             viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
         }
         date_input.onChanged = viewModel::onDateChanged
         date_input.onDoneAction = { viewModel.onDateEntered(date_input.date) }
+        which_event_options.onOptionSelected = viewModel::onOptionSelected
     }
 
     private fun updateViewState(viewState: QuizViewState) {
@@ -59,9 +65,12 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         date_error.isVisible = viewState.whatDateContent.showError
 
         which_event_options.isVisible = viewState.showWhichEventContent
-        which_event_options.updateView(viewState.whichEventContent.options)
 
         submit.isEnabled = viewState.submitEnabled
+    }
+
+    private fun updateWhichEventViewState(viewState: WhichEventViewState) {
+        which_event_options.updateView(viewState.options)
     }
 
     private fun showAlert(message: String) {
