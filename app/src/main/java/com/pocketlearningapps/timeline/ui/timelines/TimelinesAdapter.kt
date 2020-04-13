@@ -10,8 +10,13 @@ import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Timeline
 
+typealias OnTimelineClickHandler = (timeline: Timeline) -> Unit
+
 class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
+
     private val data = mutableListOf<Timeline>()
+
+    var onTimelineClicked: OnTimelineClickHandler? = null
 
     fun setData(items: Collection<Timeline>) {
         this.data.clear()
@@ -24,11 +29,9 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
             .inflate(R.layout.item_timeline, parent, false)
 
         view.setOnClickListener {
-            val id = it.tag as String
-            val intent = Intent(view.context, TimelineActivity::class.java).apply {
-                putExtra("TIMELINE_ID", id)
-            }
-            view.context.startActivity(intent)
+            val position = it.tag as Int
+            val timeline = data.get(position)
+            onTimelineClicked?.invoke(timeline)
         }
 
         return ViewHolder(view)
@@ -40,7 +43,7 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val timeline = data.get(position)
-        holder.itemView.tag = timeline.id
+        holder.itemView.tag = position
         holder.title.text = timeline.title
         holder.description.text = timeline.description
     }
