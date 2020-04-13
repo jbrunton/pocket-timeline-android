@@ -1,8 +1,5 @@
-package com.pocketlearningapps.timeline.ui.quiz
+package com.pocketlearningapps.timeline.entities
 
-import com.pocketlearningapps.timeline.entities.Event
-import com.pocketlearningapps.timeline.entities.Timeline
-import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
