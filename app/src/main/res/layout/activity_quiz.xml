@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        android:elevation="4dp">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            tools:progress="50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleY="2"
+            android:layout_margin="@dimen/margin"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_margin="@dimen/margin">
+
+        <TextView
+            android:id="@+id/question_title"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="When did the following event occur in World War 2?"
+            android:layout_marginBottom="@dimen/margin"
+            />
+
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:id="@+id/question_details"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/question_title"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin"
+            tools:text="Germany invades Poland" />
+
+        <LinearLayout
+            android:id="@+id/what_date_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/question_details"
+            android:layout_above="@id/submit"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <com.pocketlearningapps.timeline.lib.DateInput
+                android:id="@+id/date_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin" />
+
+            <TextView
+                android:id="@+id/date_error"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:textColor="@color/colorPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:text="Please enter a valid date"
+                android:layout_marginBottom="@dimen/margin"/>
+
+        </LinearLayout>
+
+        <com.pocketlearningapps.timeline.ui.quiz.EventOptionsGroup
+            android:id="@+id/which_event_options"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/question_details"
+            android:layout_above="@id/submit"
+            android:gravity="center_vertical"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/submit"
+            android:text="Submit"
+            android:layout_alignParentBottom="true"
+            android:enabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
