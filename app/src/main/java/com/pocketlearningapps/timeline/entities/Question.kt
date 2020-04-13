@@ -1,5 +1,6 @@
 package com.pocketlearningapps.timeline.entities
 
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
@@ -12,7 +13,7 @@ sealed class Question {
         val timeline: Timeline,
         val event: Event
     ) : Question() {
-        override fun validate(answer: Any?) = answer == correctAnswer
+        override fun validate(answer: Any?) = answer == event.date
         override val correctAnswer: String = event.date.format(formatter)
     }
 
