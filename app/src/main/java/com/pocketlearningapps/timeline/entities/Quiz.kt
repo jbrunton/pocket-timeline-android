@@ -6,7 +6,7 @@ import kotlin.random.Random
 private const val QUIZ_LENGTH = 3
 
 class Quiz(private val timeline: Timeline) {
-    var totalQuestions = 1
+    var totalQuestions = 0
         private set
 
     var correctQuestions = 0
@@ -17,7 +17,7 @@ class Quiz(private val timeline: Timeline) {
 
     val isComplete get() = correctQuestions >= QUIZ_LENGTH
 
-    val percentComplete: Int get() = round(totalQuestions * 100.0 / QUIZ_LENGTH).toInt()
+    val percentComplete: Int get() = round((correctQuestions + 1) * 100.0 / QUIZ_LENGTH).toInt()
     val percentCorrect: Int get() = round(correctQuestions * 100.0 / totalQuestions).toInt()
 
     fun nextQuestion(): Question {
@@ -26,7 +26,7 @@ class Quiz(private val timeline: Timeline) {
         }
 
         val event = timeline.events.get(Random.nextInt(timeline.events.size))
-        currentQuestion = if (false /*Random.nextBoolean()*/) {
+        currentQuestion = if (Random.nextBoolean()) {
             Question.WhatDateQuestion(timeline, event)
         } else {
             Question.WhichEventQuestion(timeline, event, pickEventOptions(timeline.events, event))
