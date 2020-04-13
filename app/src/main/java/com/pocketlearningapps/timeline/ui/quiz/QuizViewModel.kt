@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Question
 import com.pocketlearningapps.timeline.entities.Quiz
+import com.pocketlearningapps.timeline.entities.RatingsRepository
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
@@ -64,7 +65,10 @@ class QuizViewStateFactory {
 
 }
 
-class QuizViewModel(private val service: RetrofitService) : ViewModel() {
+class QuizViewModel(
+    private val service: RetrofitService,
+    private val ratingsRepository: RatingsRepository
+) : ViewModel() {
     private lateinit var question: Question
     val viewState = MutableLiveData<QuizViewState>()
     val showAnswerAlert = SingleLiveEvent<String>()
@@ -79,7 +83,7 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
     fun initialize(timelineId: String) {
         viewModelScope.launch {
             val timeline = service.timeline(timelineId)
-            quiz = Quiz(timeline)
+            quiz = Quiz(timeline, ratingsRepository)
             nextQuestion()
         }
     }

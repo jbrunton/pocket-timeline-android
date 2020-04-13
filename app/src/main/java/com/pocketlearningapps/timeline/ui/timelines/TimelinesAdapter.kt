@@ -5,14 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
+import com.pocketlearningapps.timeline.entities.RatingsRepository
 import com.pocketlearningapps.timeline.entities.Timeline
 
 typealias OnTimelineClickHandler = (timeline: Timeline) -> Unit
 
-class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
+class TimelinesAdapter(
+    private val ratingsRepository: RatingsRepository
+) : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
 
     private val data = mutableListOf<Timeline>()
 
@@ -46,6 +50,7 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         holder.itemView.tag = position
         holder.title.text = timeline.title
         holder.description.text = timeline.description
+        holder.rating.rating = ratingsRepository.getRating(timeline.id).toFloat()
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -53,5 +58,6 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         // for any view that will be set as you render a row
         val title: TextView = itemView.findViewById(R.id.timeline_title)
         var description: TextView = itemView.findViewById(R.id.timeline_description)
+        val rating: AppCompatRatingBar = itemView.findViewById(R.id.score)
     }
 }
