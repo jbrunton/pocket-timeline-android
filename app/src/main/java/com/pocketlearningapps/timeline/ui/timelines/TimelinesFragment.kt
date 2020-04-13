@@ -12,6 +12,7 @@ import com.jbrunton.inject.HasContainer
 import com.jbrunton.inject.inject
 import com.jbrunton.inject.injectViewModel
 import com.pocketlearningapps.timeline.R
+import com.pocketlearningapps.timeline.entities.RatingsRepository
 import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.android.synthetic.main.fragment_timelines.*
@@ -19,14 +20,15 @@ import kotlinx.android.synthetic.main.fragment_timelines.*
 class TimelinesFragment : Fragment(R.layout.fragment_timelines), HasContainer {
     override val container by lazy { (activity?.application as HasContainer).container }
 
-    val service: RetrofitService by inject()
+    private val service: RetrofitService by inject()
+    private val ratingsRepository: RatingsRepository by inject()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
 
-        val adapter = TimelinesAdapter()
+        val adapter = TimelinesAdapter(ratingsRepository)
         timelines.adapter = adapter
         timelines.layoutManager = LinearLayoutManager(activity)
         adapter.onTimelineClicked = this::onTimelineClicked

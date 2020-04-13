@@ -10,28 +10,37 @@ import com.jbrunton.inject.Container
 import com.jbrunton.inject.HasContainer
 import com.jbrunton.inject.inject
 import com.pocketlearningapps.timeline.R
+import com.pocketlearningapps.timeline.entities.RatingsRepository
 import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.network.RetrofitService
 import com.pocketlearningapps.timeline.ui.timelines.TimelineActivity
 import com.pocketlearningapps.timeline.ui.timelines.TimelinesAdapter
 import kotlinx.android.synthetic.main.fragment_quiz_selector.*
 
+private const val REQUEST_CODE = 0x10
+
 class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasContainer {
     override val container by lazy { (activity?.application as HasContainer).container }
 
     private val service: RetrofitService by inject()
+    private val ratingsRepository: RatingsRepository by inject()
+    private lateinit var adapter: TimelinesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = TimelinesAdapter()
+        adapter = TimelinesAdapter(ratingsRepository)
         timelines.adapter = adapter
         timelines.layoutManager = LinearLayoutManager(context)
         adapter.onTimelineClicked = this::onTimelineClicked
 
-        lifecycleScope.launchWhenCreated {
-            val timelines = service.timelines()
-            adapter.setData(timelines)
+        refreshData()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE) {
+            refreshData()
         }
     }
 
@@ -39,6 +48,13 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
         val intent = Intent(requireContext(), QuizActivity::class.java).apply {
             putExtra("TIMELINE_ID", timeline.id)
         }
-        requireContext().startActivity(intent)
+        startActivityForResult(intent, REQUEST_CODE)
+    }
+
+    private fun refreshData() {
+        lifecycleScope.launchWhenCreated {
+            val timelines = service.timelines()
+            adapter.setData(timelines)
+        }
     }
 }
