@@ -1,6 +1,8 @@
 package com.pocketlearningapps.timeline.ui.quiz
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -22,6 +24,9 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         super.onCreate(savedInstanceState)
 
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
+        progress_bar.setProgress(10)
 
         viewModel.viewState.observe(this, Observer { updateViewState(it) })
         viewModel.showAlert.observe(this, Observer { showAlert(it) })
@@ -42,6 +47,16 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         date_input.onChanged = viewModel::onDateChanged
         date_input.onDoneAction = { viewModel.onDateEntered(date_input.date) }
         which_event_options.onOptionSelected = viewModel::onOptionSelected
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            setResult(Activity.RESULT_CANCELED)
+            finishAfterTransition()
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun updateViewState(viewState: QuizViewState) {
