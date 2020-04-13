@@ -13,6 +13,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField("String", "SERVER_DOMAIN", "\"http://${local_ip}:3000\"")
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -59,3 +61,4 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         jvmTarget = "1.8"
     }
 }
+
