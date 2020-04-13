@@ -11,9 +11,10 @@ import com.pocketlearningapps.timeline.R
 import kotlinx.android.synthetic.main.view_date_input.view.*
 import java.lang.Integer.parseInt
 import java.lang.NumberFormatException
+import java.time.DateTimeException
 import java.time.LocalDate
 
-typealias DateInputChanged = (day: Int?, month: Int?, year: Int?) -> Unit
+typealias DateInputChanged = (date: LocalDate?) -> Unit
 
 class DateInput @JvmOverloads constructor(
     context: Context,
@@ -36,7 +37,7 @@ class DateInput @JvmOverloads constructor(
 
         listOf(date_input_day, date_input_month, date_input_year).forEach {
             it.doAfterTextChanged {
-                onChanged?.invoke(day, month, year)
+                onChanged?.invoke(date)
             }
         }
     }
@@ -85,7 +86,11 @@ class DateInput @JvmOverloads constructor(
             return if (d == null || m == null || y == null) {
                 null
             } else {
-                LocalDate.of(y, m, d)
+                try {
+                    LocalDate.of(y, m, d)
+                } catch (e: DateTimeException) {
+                    null
+                }
             }
         }
         set(date) {

@@ -110,10 +110,9 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         }
     }
 
-    fun onDateChanged(day: Int?, month: Int?, year: Int?) {
+    fun onDateChanged(date: LocalDate?) {
         if (question is Question.WhatDateQuestion) {
-            val validAnswer = day != null && month != null && year != null
-            viewState.postValue(viewState.value?.copy(submitEnabled = validAnswer))
+            viewState.postValue(viewState.value?.copy(submitEnabled = date != null))
         }
     }
 
