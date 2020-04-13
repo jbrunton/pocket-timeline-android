@@ -17,6 +17,7 @@ import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.lib.KeyboardHelper
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.android.synthetic.main.fragment_quiz.*
+import kotlinx.android.synthetic.main.view_date_input.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import kotlin.random.Random
@@ -35,9 +36,14 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
         viewModel.showAlert.observe(viewLifecycleOwner, Observer { showAlert(it) })
         viewModel.hideKeyboard.observe(viewLifecycleOwner, Observer { keyboardHelper.hideKeyboard(date_input) })
         viewModel.focusOnSubmit.observe(viewLifecycleOwner, Observer { submit.requestFocus() })
+        viewModel.clearDateInput.observe(viewLifecycleOwner, Observer { date_input.date = null })
+        viewModel.focusOnDateInput.observe(viewLifecycleOwner, Observer {
+            keyboardHelper.showKeyboard(date_input_day)
+            date_input_day.requestFocus()
+        })
 
         submit.setOnClickListener {
-            viewModel.onSubmitClicked(date_input.date!!, which_event_options.selectedEventId)
+            viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
         }
         date_input.onChanged = viewModel::onDateChanged
         date_input.onDoneAction = { viewModel.onDateEntered(date_input.date) }

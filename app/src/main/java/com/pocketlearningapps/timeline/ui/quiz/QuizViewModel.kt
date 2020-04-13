@@ -71,6 +71,8 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
     val showAlert = SingleLiveEvent<String>()
     val hideKeyboard = SingleLiveAction()
     val focusOnSubmit = SingleLiveAction()
+    val focusOnDateInput = SingleLiveAction()
+    val clearDateInput = SingleLiveAction()
     private lateinit var timelines: List<Timeline>
     private val viewStateFactory = QuizViewStateFactory()
 
@@ -86,12 +88,16 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         viewModelScope.launch {
             val timelineEvents = service.timeline(timeline.id).events
             val event = timelineEvents.get(Random.nextInt(timelineEvents.size))
-            question = if (true /*Random.nextBoolean()*/) {
+            question = if (Random.nextBoolean()) {
                 Question.WhatDateQuestion(timeline, event)
             } else {
                 Question.WhichEventQuestion(timeline, event, pickEventOptions(timelineEvents, event))
             }
             viewState.postValue(viewStateFactory.viewState(question))
+            clearDateInput.post()
+            if (question is Question.WhatDateQuestion) {
+                focusOnDateInput.post()
+            }
         }
     }
 
@@ -103,7 +109,7 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
             .plus(correctAnswer)
     }
 
-    fun onSubmitClicked(whatDateAnswer: LocalDate, whichEventAnswer: String?) {
+    fun onSubmitClicked(whatDateAnswer: LocalDate?, whichEventAnswer: String?) {
         val answer = when (question) {
             is Question.WhatDateQuestion -> whatDateAnswer
             is Question.WhichEventQuestion -> whichEventAnswer ?: ""
@@ -134,15 +140,15 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
     fun onDateEntered(date: LocalDate?) {
         hideKeyboard.post()
         val valid = date != null
-        if (valid) {
-            focusOnSubmit.post()
-        }
         with (viewState.value) {
             this?.let {
                 val newState = copy(
                     whatDateContent = whatDateContent.copy(showError = !valid)
                 )
                 viewState.postValue(newState)
+            }
+            if (valid) {
+                focusOnSubmit.post()
             }
         }
     }
