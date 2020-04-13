@@ -3,17 +3,20 @@ package com.pocketlearningapps.timeline.ui.quiz
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Timeline
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
 
 sealed class Question {
-    abstract fun validate(answer: String): Boolean
+    abstract fun validate(answer: Any?): Boolean
     abstract val correctAnswer: String
 
     data class WhatDateQuestion(
         val timeline: Timeline,
         val event: Event
     ) : Question() {
-        override fun validate(answer: String) = answer == correctAnswer
-        override val correctAnswer: String = event.date.year.toString()
+        override fun validate(answer: Any?) = answer == correctAnswer
+        override val correctAnswer: String = event.date.format(formatter)
     }
 
     data class WhichEventQuestion(
@@ -21,7 +24,7 @@ sealed class Question {
         val event: Event,
         val options: List<Event>
     ) : Question() {
-        override fun validate(answer: String) = answer == event.id
+        override fun validate(answer: Any?) = answer == event.id
         override val correctAnswer: String = event.title
     }
 }

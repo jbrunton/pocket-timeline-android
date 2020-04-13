@@ -17,6 +17,7 @@ class EventOptionsGroup @JvmOverloads constructor(
     }
 
     var selectedEventId: String? = null
+    var onOptionSelected: ((String) -> Unit)? = null
 
     fun updateView(viewState: List<Event>) {
         selectedEventId = null
@@ -27,10 +28,10 @@ class EventOptionsGroup @JvmOverloads constructor(
     private fun addOption(event: Event) {
         val view = RadioButton(context)
         view.text = event.title
-        view.tag = event.id
         view.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 selectedEventId = event.id
+                onOptionSelected?.invoke(event.id)
             }
         }
         addView(view)

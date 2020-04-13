@@ -1,6 +1,7 @@
 package com.pocketlearningapps.timeline.network
 
 import com.google.gson.GsonBuilder
+import com.pocketlearningapps.timeline.BuildConfig
 import com.pocketlearningapps.timeline.auth.session.SessionCookieJar
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,7 +26,7 @@ class RetrofitServiceFactory(
 
         return Retrofit.Builder()
             .client(client)
-            .baseUrl("http://10.0.2.2:3000")
+            .baseUrl(BuildConfig.SERVER_DOMAIN)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
             .create(RetrofitService::class.java)
