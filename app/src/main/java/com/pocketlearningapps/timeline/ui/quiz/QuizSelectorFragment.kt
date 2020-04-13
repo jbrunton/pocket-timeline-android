@@ -37,7 +37,7 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
 
     private fun onTimelineClicked(timeline: Timeline) {
         val intent = Intent(requireContext(), QuizActivity::class.java).apply {
-            putExtra("TIMELINE_ID", id)
+            putExtra("TIMELINE_ID", timeline.id)
         }
         requireContext().startActivity(intent)
     }
