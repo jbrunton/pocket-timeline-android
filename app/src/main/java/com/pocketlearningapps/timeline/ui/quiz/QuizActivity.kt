@@ -30,7 +30,8 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         progress_bar.setProgress(10)
 
         viewModel.viewState.observe(this, Observer { updateViewState(it) })
-        viewModel.showAlert.observe(this, Observer { showAlert(it) })
+        viewModel.showAnswerAlert.observe(this, Observer { showAnswerAlert(it) })
+        viewModel.showQuizCompleteAlert.observe(this, Observer { showQuizCompletedAlert(it) })
         viewModel.hideKeyboard.observe(this, Observer { keyboardHelper.hideKeyboard(date_input) })
         viewModel.focusOnSubmit.observe(this, Observer { submit.requestFocus() })
         viewModel.clearDateInput.observe(this, Observer { date_input.date = null })
@@ -81,10 +82,17 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         which_event_options.updateView(viewState.options)
     }
 
-    private fun showAlert(message: String) {
+    private fun showAnswerAlert(message: String) {
         MaterialAlertDialogBuilder(this)
             .setMessage(message)
-            .setPositiveButton("OK", { _, _ -> viewModel.onDialogDismissed() })
+            .setPositiveButton("OK", { _, _ -> viewModel.onAnswerDialogDismissed() })
+            .show()
+    }
+
+    private fun showQuizCompletedAlert(message: String) {
+        MaterialAlertDialogBuilder(this)
+            .setMessage(message)
+            .setPositiveButton("OK", { _, _ -> finishAfterTransition() })
             .show()
     }
 }

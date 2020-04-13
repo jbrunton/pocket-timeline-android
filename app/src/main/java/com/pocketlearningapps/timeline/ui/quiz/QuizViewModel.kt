@@ -4,22 +4,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pocketlearningapps.timeline.entities.Event
-import com.pocketlearningapps.timeline.entities.Timeline
+import com.pocketlearningapps.timeline.entities.Question
+import com.pocketlearningapps.timeline.entities.Quiz
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
-import java.sql.Time
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import kotlin.random.Random
+import java.util.*
+import kotlin.math.round
 
 data class WhatDateViewState(
     val showError: Boolean
 )
 
 data class WhichEventViewState(
-    val options: List<Event>
+    val options: List<Event>,
+    val uuid: UUID
 )
 
 data class QuizViewState(
@@ -42,7 +44,7 @@ class QuizViewStateFactory {
                 showWhatDateContent = true,
                 whatDateContent = WhatDateViewState(showError = false),
                 showWhichEventContent = false,
-                whichEventContent = WhichEventViewState(emptyList()),
+                whichEventContent = WhichEventViewState(emptyList(), UUID.randomUUID()),
                 submitEnabled = false
             )
             is Question.WhichEventQuestion -> QuizViewState(
@@ -51,7 +53,7 @@ class QuizViewStateFactory {
                 showWhatDateContent = false,
                 whatDateContent = WhatDateViewState(showError = false),
                 showWhichEventContent = true,
-                whichEventContent = WhichEventViewState(question.options),
+                whichEventContent = WhichEventViewState(question.options, UUID.randomUUID()),
                 submitEnabled = false
             )
         }
@@ -63,55 +65,42 @@ class QuizViewStateFactory {
 class QuizViewModel(private val service: RetrofitService) : ViewModel() {
     private lateinit var question: Question
     val viewState = MutableLiveData<QuizViewState>()
-    val showAlert = SingleLiveEvent<String>()
+    val showAnswerAlert = SingleLiveEvent<String>()
+    val showQuizCompleteAlert = SingleLiveEvent<String>()
     val hideKeyboard = SingleLiveAction()
     val focusOnSubmit = SingleLiveAction()
     val focusOnDateInput = SingleLiveAction()
     val clearDateInput = SingleLiveAction()
-    private lateinit var timeline: Timeline
+    private lateinit var quiz: Quiz
     private val viewStateFactory = QuizViewStateFactory()
 
     fun initialize(timelineId: String) {
         viewModelScope.launch {
-            timeline = service.timeline(timelineId)
+            val timeline = service.timeline(timelineId)
+            quiz = Quiz(timeline)
             nextQuestion()
         }
     }
 
     private fun nextQuestion() {
-        viewModelScope.launch {
-            val event = timeline.events.get(Random.nextInt(timeline.events.size))
-            question = if (Random.nextBoolean()) {
-                Question.WhatDateQuestion(timeline, event)
-            } else {
-                Question.WhichEventQuestion(timeline, event, pickEventOptions(timeline.events, event))
-            }
-            viewState.postValue(viewStateFactory.viewState(question))
-            clearDateInput.post()
-            if (question is Question.WhatDateQuestion) {
-                focusOnDateInput.post()
-            }
+        question = quiz.nextQuestion()
+        viewState.postValue(viewStateFactory.viewState(question))
+        clearDateInput.post()
+        if (question is Question.WhatDateQuestion) {
+            focusOnDateInput.post()
         }
-    }
-
-    private fun pickEventOptions(events: List<Event>, correctAnswer: Event): List<Event> {
-        return events
-            .filter { it.id != correctAnswer.id }
-            .sortedBy { Random.nextInt() }
-            .take(2)
-            .plus(correctAnswer)
     }
 
     fun onSubmitClicked(whatDateAnswer: LocalDate?, whichEventAnswer: String?) {
         hideKeyboard.post()
         val answer = when (question) {
             is Question.WhatDateQuestion -> whatDateAnswer
-            is Question.WhichEventQuestion -> whichEventAnswer ?: ""
+            is Question.WhichEventQuestion -> whichEventAnswer
         }
-        if (question.validate(answer)) {
-            showAlert.postValue("Correct!")
+        if (quiz.submitAnswer(answer)) {
+            showAnswerAlert.postValue("Correct!")
         } else {
-            showAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
+            showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
         }
     }
 
@@ -158,7 +147,12 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
         }
     }
 
-    fun onDialogDismissed() {
-        nextQuestion()
+    fun onAnswerDialogDismissed() {
+        if (quiz.isComplete) {
+            val percent = (quiz.correctQuestions * 100.0) / quiz.totalQuestions
+            showQuizCompleteAlert.postValue("Quiz complete. You scored ${round(percent)}%")
+        } else {
+            nextQuestion()
+        }
     }
 }
