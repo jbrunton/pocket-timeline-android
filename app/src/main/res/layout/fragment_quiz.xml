@@ -15,9 +15,9 @@
         android:elevation="4dp"
         app:title="@string/nav_title_quiz" />
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_margin="@dimen/margin">
@@ -27,6 +27,7 @@
             style="@style/TextAppearance.MaterialComponents.Headline5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:text="On what date did the following event occur?"
             android:layout_marginBottom="@dimen/margin"
             />
@@ -36,6 +37,7 @@
             android:id="@+id/timeline_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/question"
             android:layout_marginBottom="@dimen/margin"
             tools:text="World War 2" />
 
@@ -43,6 +45,7 @@
             android:id="@+id/what_date_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/timeline_title"
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
@@ -77,15 +80,17 @@
             android:id="@+id/which_event_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/timeline_title"
             android:orientation="vertical" />
 
         <Button
             android:id="@+id/submit"
             android:text="Submit"
+            android:layout_alignParentBottom="true"
             android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
