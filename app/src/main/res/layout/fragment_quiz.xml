@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/question"
-            style="@style/TextAppearance.MaterialComponents.Headline4"
+            style="@style/TextAppearance.MaterialComponents.Headline5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="On what date did the following event occur?"
@@ -47,7 +47,7 @@
             android:gravity="center_horizontal">
 
             <TextView
-                style="@style/TextAppearance.MaterialComponents.Headline5"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:id="@+id/event_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 
             <com.pocketlearningapps.timeline.lib.DateInput
                 android:id="@+id/date_input"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin" />
 
