@@ -1,11 +1,12 @@
 package com.pocketlearningapps.timeline.entities
 
+import kotlin.math.round
 import kotlin.random.Random
 
 private const val QUIZ_LENGTH = 3
 
 class Quiz(private val timeline: Timeline) {
-    var totalQuestions = 0
+    var totalQuestions = 1
         private set
 
     var correctQuestions = 0
@@ -15,6 +16,9 @@ class Quiz(private val timeline: Timeline) {
         private set
 
     val isComplete get() = correctQuestions >= QUIZ_LENGTH
+
+    val percentComplete: Int get() = round(totalQuestions * 100.0 / QUIZ_LENGTH).toInt()
+    val percentCorrect: Int get() = round(correctQuestions * 100.0 / totalQuestions).toInt()
 
     fun nextQuestion(): Question {
         if (isComplete) {

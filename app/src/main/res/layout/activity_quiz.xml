@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -38,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:text="When did the following event occur in World War 2?"
+            tools:text="When did the following event occur?"
             android:layout_marginBottom="@dimen/margin"
             />
 
@@ -56,6 +55,8 @@
             tools:text="Germany invades Poland" />
 
         <LinearLayout
+            android:visibility="gone"
+            tools:visibility="visible"
             android:id="@+id/what_date_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

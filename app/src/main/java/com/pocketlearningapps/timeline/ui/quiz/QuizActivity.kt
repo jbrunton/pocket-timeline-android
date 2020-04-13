@@ -27,7 +27,6 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
-        progress_bar.setProgress(10)
 
         viewModel.viewState.observe(this, Observer { updateViewState(it) })
         viewModel.showAnswerAlert.observe(this, Observer { showAnswerAlert(it) })
@@ -67,6 +66,7 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
 
     private fun updateViewState(viewState: QuizViewState) {
         //date_input.date = null
+        progress_bar.setProgress(viewState.percentComplete)
         question_title.text = viewState.questionTitle
         question_details.text = viewState.questionDetails
 

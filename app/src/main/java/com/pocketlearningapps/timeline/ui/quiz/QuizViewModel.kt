@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.math.round
 
 data class WhatDateViewState(
     val showError: Boolean
@@ -31,12 +30,13 @@ data class QuizViewState(
     val whatDateContent: WhatDateViewState,
     val showWhichEventContent: Boolean,
     val whichEventContent: WhichEventViewState,
-    val submitEnabled: Boolean
+    val submitEnabled: Boolean,
+    val percentComplete: Int
 )
 
 class QuizViewStateFactory {
     private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-    fun viewState(question: Question): QuizViewState {
+    fun viewState(question: Question, percentComplete: Int): QuizViewState {
         return when (question) {
             is Question.WhatDateQuestion -> QuizViewState(
                 questionTitle = "When did the following event occur?",
@@ -45,16 +45,18 @@ class QuizViewStateFactory {
                 whatDateContent = WhatDateViewState(showError = false),
                 showWhichEventContent = false,
                 whichEventContent = WhichEventViewState(emptyList(), UUID.randomUUID()),
-                submitEnabled = false
+                submitEnabled = false,
+                percentComplete = percentComplete
             )
             is Question.WhichEventQuestion -> QuizViewState(
-                questionTitle = "Select the event from that occurred on this date",
+                questionTitle = "Select the event that occurred on this date",
                 questionDetails = question.event.date.format(dateFormatter),
                 showWhatDateContent = false,
                 whatDateContent = WhatDateViewState(showError = false),
                 showWhichEventContent = true,
                 whichEventContent = WhichEventViewState(question.options, UUID.randomUUID()),
-                submitEnabled = false
+                submitEnabled = false,
+                percentComplete = percentComplete
             )
         }
     }
@@ -84,7 +86,7 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
 
     private fun nextQuestion() {
         question = quiz.nextQuestion()
-        viewState.postValue(viewStateFactory.viewState(question))
+        viewState.postValue(viewStateFactory.viewState(question, quiz.percentComplete))
         clearDateInput.post()
         if (question is Question.WhatDateQuestion) {
             focusOnDateInput.post()
@@ -149,8 +151,7 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
 
     fun onAnswerDialogDismissed() {
         if (quiz.isComplete) {
-            val percent = (quiz.correctQuestions * 100.0) / quiz.totalQuestions
-            showQuizCompleteAlert.postValue("Quiz complete. You scored ${round(percent)}%")
+            showQuizCompleteAlert.postValue("Quiz complete. You scored ${quiz.percentCorrect}%")
         } else {
             nextQuestion()
         }
