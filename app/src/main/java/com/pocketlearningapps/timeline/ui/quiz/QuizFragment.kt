@@ -57,11 +57,10 @@ class QuizFragment : Fragment(R.layout.fragment_quiz), HasContainer {
 
     private fun updateViewState(viewState: QuizViewState) {
         //date_input.date = null
-        question.text = viewState.question
-        timeline_title.text = viewState.timelineTitle
+        question_title.text = viewState.questionTitle
+        question_details.text = viewState.questionDetails
 
         what_date_content.isVisible = viewState.showWhatDateContent
-        event_title.text = viewState.whatDateContent.eventTitle
         date_error.isVisible = viewState.whatDateContent.showError
 
         which_event_options.isVisible = viewState.showWhichEventContent

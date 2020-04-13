@@ -1,25 +1,19 @@
 package com.pocketlearningapps.timeline.ui.quiz
 
-import android.text.Editable
-import android.util.Log
-import androidx.core.view.isVisible
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
-import kotlinx.android.synthetic.main.fragment_quiz.*
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
 data class WhatDateViewState(
-    val eventTitle: String,
     val showError: Boolean
 )
 
@@ -28,8 +22,8 @@ data class WhichEventViewState(
 )
 
 data class QuizViewState(
-    val question: String,
-    val timelineTitle: String,
+    val questionTitle: String,
+    val questionDetails: String,
     val showWhatDateContent: Boolean,
     val whatDateContent: WhatDateViewState,
     val showWhichEventContent: Boolean,
@@ -42,19 +36,19 @@ class QuizViewStateFactory {
     fun viewState(question: Question): QuizViewState {
         return when (question) {
             is Question.WhatDateQuestion -> QuizViewState(
-                question = "On what date did the following event occur?",
-                timelineTitle = question.timeline.title,
+                questionTitle = "When did the following event occur in ${question.timeline.title}?",
+                questionDetails = question.event.title,
                 showWhatDateContent = true,
-                whatDateContent = WhatDateViewState(eventTitle = question.event.title, showError = false),
+                whatDateContent = WhatDateViewState(showError = false),
                 showWhichEventContent = false,
                 whichEventContent = WhichEventViewState(emptyList()),
                 submitEnabled = false
             )
             is Question.WhichEventQuestion -> QuizViewState(
-                question = "Which of the following events occurred on\n${question.event.date.format(dateFormatter)}?",
-                timelineTitle = question.timeline.title,
+                questionTitle = "Select the event from ${question.timeline.title} that occurred on this date",
+                questionDetails = question.event.date.format(dateFormatter),
                 showWhatDateContent = false,
-                whatDateContent = WhatDateViewState("", showError = false),
+                whatDateContent = WhatDateViewState(showError = false),
                 showWhichEventContent = true,
                 whichEventContent = WhichEventViewState(question.options),
                 submitEnabled = false
@@ -110,6 +104,7 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
     }
 
     fun onSubmitClicked(whatDateAnswer: LocalDate?, whichEventAnswer: String?) {
+        hideKeyboard.post()
         val answer = when (question) {
             is Question.WhatDateQuestion -> whatDateAnswer
             is Question.WhichEventQuestion -> whichEventAnswer ?: ""
