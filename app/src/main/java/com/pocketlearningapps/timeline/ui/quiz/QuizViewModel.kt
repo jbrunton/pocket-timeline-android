@@ -9,6 +9,7 @@ import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
+import java.sql.Time
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
@@ -36,7 +37,7 @@ class QuizViewStateFactory {
     fun viewState(question: Question): QuizViewState {
         return when (question) {
             is Question.WhatDateQuestion -> QuizViewState(
-                questionTitle = "When did the following event occur in ${question.timeline.title}?",
+                questionTitle = "When did the following event occur?",
                 questionDetails = question.event.title,
                 showWhatDateContent = true,
                 whatDateContent = WhatDateViewState(showError = false),
@@ -45,7 +46,7 @@ class QuizViewStateFactory {
                 submitEnabled = false
             )
             is Question.WhichEventQuestion -> QuizViewState(
-                questionTitle = "Select the event from ${question.timeline.title} that occurred on this date",
+                questionTitle = "Select the event from that occurred on this date",
                 questionDetails = question.event.date.format(dateFormatter),
                 showWhatDateContent = false,
                 whatDateContent = WhatDateViewState(showError = false),
@@ -67,25 +68,23 @@ class QuizViewModel(private val service: RetrofitService) : ViewModel() {
     val focusOnSubmit = SingleLiveAction()
     val focusOnDateInput = SingleLiveAction()
     val clearDateInput = SingleLiveAction()
-    private lateinit var timelines: List<Timeline>
+    private lateinit var timeline: Timeline
     private val viewStateFactory = QuizViewStateFactory()
 
-    init {
+    fun initialize(timelineId: String) {
         viewModelScope.launch {
-            timelines = service.timelines()
+            timeline = service.timeline(timelineId)
             nextQuestion()
         }
     }
 
     private fun nextQuestion() {
-        val timeline = timelines.get(Random.nextInt(timelines.size))
         viewModelScope.launch {
-            val timelineEvents = service.timeline(timeline.id).events
-            val event = timelineEvents.get(Random.nextInt(timelineEvents.size))
+            val event = timeline.events.get(Random.nextInt(timeline.events.size))
             question = if (Random.nextBoolean()) {
                 Question.WhatDateQuestion(timeline, event)
             } else {
-                Question.WhichEventQuestion(timeline, event, pickEventOptions(timelineEvents, event))
+                Question.WhichEventQuestion(timeline, event, pickEventOptions(timeline.events, event))
             }
             viewState.postValue(viewStateFactory.viewState(question))
             clearDateInput.post()

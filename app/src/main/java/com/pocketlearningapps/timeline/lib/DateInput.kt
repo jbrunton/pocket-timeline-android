@@ -10,7 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doOnTextChanged
 import com.pocketlearningapps.timeline.R
-import kotlinx.android.synthetic.main.fragment_quiz.view.*
+import kotlinx.android.synthetic.main.fragment_quiz_selector.view.*
 import kotlinx.android.synthetic.main.view_date_input.view.*
 import java.lang.Integer.parseInt
 import java.lang.NumberFormatException

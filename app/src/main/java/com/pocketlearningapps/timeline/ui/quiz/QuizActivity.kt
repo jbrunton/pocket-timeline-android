@@ -19,6 +19,7 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
     override val container by lazy { (application as HasContainer).container }
     private val viewModel: QuizViewModel by injectViewModel()
     private val keyboardHelper: KeyboardHelper by inject()
+    private val timelineId by lazy { intent.getStringExtra("TIMELINE_ID") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +48,10 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         date_input.onChanged = viewModel::onDateChanged
         date_input.onDoneAction = { viewModel.onDateEntered(date_input.date) }
         which_event_options.onOptionSelected = viewModel::onOptionSelected
+
+        if (savedInstanceState == null) {
+            viewModel.initialize(timelineId)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
