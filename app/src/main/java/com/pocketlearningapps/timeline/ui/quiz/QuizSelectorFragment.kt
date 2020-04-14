@@ -12,7 +12,6 @@ import com.jbrunton.inject.HasContainer
 import com.jbrunton.inject.inject
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Timeline
-import com.pocketlearningapps.timeline.entities.withRatings
 import com.pocketlearningapps.timeline.network.RetrofitService
 import com.pocketlearningapps.timeline.ui.timelines.TimelineActivity
 import com.pocketlearningapps.timeline.ui.timelines.TimelinesAdapter
@@ -56,9 +55,8 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
     private fun refreshData() {
         lifecycleScope.launchWhenCreated {
             try {
-                val timelines = async { service.timelines() }
-                val ratings = async { service.ratings() }
-                adapter.setData(timelines.await().withRatings(ratings.await()))
+                val timelines = service.timelines()
+                adapter.setData(timelines)
             } catch (e: HttpException) {
                 Log.d("HttpError", "Code: " + e.code())
             }

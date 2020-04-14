@@ -52,11 +52,4 @@ interface RetrofitService {
     )
     @POST("/ratings/score")
     suspend fun ratingsScore(@Body rating: Rating): JsonElement
-
-    @Headers(
-        "Accept: application/json",
-        "Content-Type: application/json"
-    )
-    @GET("/ratings")
-    suspend fun ratings(): List<Rating>
 }

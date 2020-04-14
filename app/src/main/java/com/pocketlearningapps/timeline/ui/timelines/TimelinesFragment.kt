@@ -14,7 +14,6 @@ import com.jbrunton.inject.inject
 import com.jbrunton.inject.injectViewModel
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Timeline
-import com.pocketlearningapps.timeline.entities.withRatings
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.android.synthetic.main.fragment_timelines.*
 import kotlinx.coroutines.async
@@ -37,9 +36,8 @@ class TimelinesFragment : Fragment(R.layout.fragment_timelines), HasContainer {
 
         lifecycleScope.launchWhenStarted {
             try {
-                val timelines = async { service.timelines() }
-                val ratings = async { service.ratings() }
-                adapter.setData(timelines.await().withRatings(ratings.await()))
+                val timelines = service.timelines()
+                adapter.setData(timelines)
             } catch (e: HttpException) {
                 Log.d("HttpError", "Code: " + e.code())
             }
