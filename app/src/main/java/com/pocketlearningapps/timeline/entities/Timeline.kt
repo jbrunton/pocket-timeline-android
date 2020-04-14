@@ -11,13 +11,13 @@ data class Timeline(
     val events: List<Event>?,
     @SerializedName("normalized_score") val normalizedScore: Float?
 ) {
-    val starRating: Int get() {
+    val starRating: Float get() {
         return if (normalizedScore == null) {
             // 0 means no rating
-            0
+            0f
         } else {
-            // otherwise, a 1-5 star rating
-            max( normalizedScore * 5, 1f).roundToInt()
+            // otherwise, a 1-5 rating
+            max( normalizedScore * 5, 1f)
         }
     }
 }

@@ -50,7 +50,7 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         holder.itemView.tag = position
         holder.title.text = timeline.title
         holder.description.text = timeline.description
-        holder.rating.rating = timeline.normalizedScore?.let { max( it * 5, 1f) } ?: 0f
+        holder.rating.rating = timeline.starRating
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
