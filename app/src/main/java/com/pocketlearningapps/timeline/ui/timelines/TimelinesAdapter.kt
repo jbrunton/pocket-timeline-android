@@ -9,14 +9,12 @@ import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
-import com.pocketlearningapps.timeline.entities.RatingsRepository
 import com.pocketlearningapps.timeline.entities.Timeline
+import kotlin.math.roundToInt
 
 typealias OnTimelineClickHandler = (timeline: Timeline) -> Unit
 
-class TimelinesAdapter(
-    private val ratingsRepository: RatingsRepository
-) : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
+class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
 
     private val data = mutableListOf<Timeline>()
 
@@ -50,7 +48,7 @@ class TimelinesAdapter(
         holder.itemView.tag = position
         holder.title.text = timeline.title
         holder.description.text = timeline.description
-        holder.rating.rating = ratingsRepository.getRating(timeline.id).toFloat()
+        holder.rating.rating = (timeline.rating ?: 0f) * 5
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

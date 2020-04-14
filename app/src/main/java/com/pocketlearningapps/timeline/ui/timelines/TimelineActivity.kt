@@ -42,7 +42,7 @@ class TimelineActivity : AppCompatActivity(R.layout.activity_timeline), HasConta
             val timeline = service.timeline(timelineId)
             title = timeline.title
             timeline_description.text = timeline.description
-            adapter.setData(timeline.events)
+            adapter.setData(timeline.events!!)
         }
     }
 }

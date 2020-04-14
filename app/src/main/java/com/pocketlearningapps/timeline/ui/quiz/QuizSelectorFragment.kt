@@ -2,6 +2,7 @@ package com.pocketlearningapps.timeline.ui.quiz
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -10,12 +11,14 @@ import com.jbrunton.inject.Container
 import com.jbrunton.inject.HasContainer
 import com.jbrunton.inject.inject
 import com.pocketlearningapps.timeline.R
-import com.pocketlearningapps.timeline.entities.RatingsRepository
 import com.pocketlearningapps.timeline.entities.Timeline
+import com.pocketlearningapps.timeline.entities.withRatings
 import com.pocketlearningapps.timeline.network.RetrofitService
 import com.pocketlearningapps.timeline.ui.timelines.TimelineActivity
 import com.pocketlearningapps.timeline.ui.timelines.TimelinesAdapter
 import kotlinx.android.synthetic.main.fragment_quiz_selector.*
+import kotlinx.coroutines.async
+import retrofit2.HttpException
 
 private const val REQUEST_CODE = 0x10
 
@@ -23,13 +26,12 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
     override val container by lazy { (activity?.application as HasContainer).container }
 
     private val service: RetrofitService by inject()
-    private val ratingsRepository: RatingsRepository by inject()
     private lateinit var adapter: TimelinesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = TimelinesAdapter(ratingsRepository)
+        adapter = TimelinesAdapter()
         timelines.adapter = adapter
         timelines.layoutManager = LinearLayoutManager(context)
         adapter.onTimelineClicked = this::onTimelineClicked
@@ -53,8 +55,13 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
 
     private fun refreshData() {
         lifecycleScope.launchWhenCreated {
-            val timelines = service.timelines()
-            adapter.setData(timelines)
+            try {
+                val timelines = async { service.timelines() }
+                val ratings = async { service.ratings() }
+                adapter.setData(timelines.await().withRatings(ratings.await()))
+            } catch (e: HttpException) {
+                Log.d("HttpError", "Code: " + e.code())
+            }
         }
     }
 }
