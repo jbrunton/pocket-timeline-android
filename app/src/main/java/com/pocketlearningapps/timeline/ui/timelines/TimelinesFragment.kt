@@ -48,7 +48,7 @@ class TimelinesFragment : Fragment(R.layout.fragment_timelines), HasContainer {
 
     private fun onTimelineClicked(timeline: Timeline) {
         val intent = Intent(requireContext(), TimelineActivity::class.java).apply {
-            putExtra("TIMELINE_ID", id)
+            putExtra("TIMELINE_ID", timeline.id)
         }
         requireContext().startActivity(intent)
     }
