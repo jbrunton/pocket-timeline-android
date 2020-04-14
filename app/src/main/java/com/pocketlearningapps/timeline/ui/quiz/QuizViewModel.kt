@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Question
 import com.pocketlearningapps.timeline.entities.Quiz
-import com.pocketlearningapps.timeline.entities.RatingsRepository
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
+import com.pocketlearningapps.timeline.network.Rating
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -66,8 +66,7 @@ class QuizViewStateFactory {
 }
 
 class QuizViewModel(
-    private val service: RetrofitService,
-    private val ratingsRepository: RatingsRepository
+    private val service: RetrofitService
 ) : ViewModel() {
     private lateinit var question: Question
     val viewState = MutableLiveData<QuizViewState>()
@@ -83,7 +82,7 @@ class QuizViewModel(
     fun initialize(timelineId: String) {
         viewModelScope.launch {
             val timeline = service.timeline(timelineId)
-            quiz = Quiz(timeline, ratingsRepository)
+            quiz = Quiz(timeline)
             nextQuestion()
         }
     }
@@ -103,10 +102,12 @@ class QuizViewModel(
             is Question.WhatDateQuestion -> whatDateAnswer
             is Question.WhichEventQuestion -> whichEventAnswer
         }
-        if (quiz.submitAnswer(answer)) {
-            showAnswerAlert.postValue("Correct!")
-        } else {
-            showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
+        viewModelScope.launch {
+            if (quiz.submitAnswer(answer, this@QuizViewModel::submitScore)) {
+                showAnswerAlert.postValue("Correct!")
+            } else {
+                showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
+            }
         }
     }
 
@@ -155,9 +156,15 @@ class QuizViewModel(
 
     fun onAnswerDialogDismissed() {
         if (quiz.isComplete) {
-            showQuizCompleteAlert.postValue("Quiz complete. You scored ${quiz.percentCorrect}%")
+            showQuizCompleteAlert.postValue("Quiz complete. You scored ${quiz.percentageScore}%")
         } else {
             nextQuestion()
+        }
+    }
+
+    private fun submitScore(rating: Rating) {
+        viewModelScope.launch {
+            service.ratingsScore(rating)
         }
     }
 }

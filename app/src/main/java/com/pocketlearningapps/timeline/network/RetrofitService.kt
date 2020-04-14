@@ -16,6 +16,11 @@ data class UserResponse(
     val email: String?
 )
 
+data class Rating(
+    @SerializedName("timeline_id") val timelineId: String,
+    @SerializedName("normalized_score") val normalizedScore: Float
+)
+
 interface RetrofitService {
     @Headers(
         "Accept: application/json",
@@ -31,9 +36,20 @@ interface RetrofitService {
     @GET("/user/profile")
     suspend fun profile(): UserResponse
 
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
     @GET("/timelines")
     suspend fun timelines(): List<Timeline>
 
     @GET("/timelines/{id}")
     suspend fun timeline(@Path("id") id: String): Timeline
+
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json"
+    )
+    @POST("/ratings/score")
+    suspend fun ratingsScore(@Body rating: Rating): JsonElement
 }
