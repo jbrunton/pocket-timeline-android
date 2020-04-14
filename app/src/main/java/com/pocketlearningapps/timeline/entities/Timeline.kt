@@ -23,4 +23,8 @@ data class Timeline(
             .map { it.level }
             .max() ?: 0
     }
+
+    fun levelRating(level: Int): Rating? {
+        return (ratings ?: sampleRatings).find { it.level == level }
+    }
 }

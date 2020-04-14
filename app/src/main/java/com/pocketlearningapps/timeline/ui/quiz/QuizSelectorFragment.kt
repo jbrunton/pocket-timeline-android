@@ -13,6 +13,7 @@ import com.jbrunton.inject.inject
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.network.RetrofitService
+import com.pocketlearningapps.timeline.ui.timelines.QuizOptionsAdapter
 import com.pocketlearningapps.timeline.ui.timelines.TimelineActivity
 import com.pocketlearningapps.timeline.ui.timelines.TimelinesAdapter
 import kotlinx.android.synthetic.main.fragment_quiz_selector.*
@@ -25,12 +26,12 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
     override val container by lazy { (activity?.application as HasContainer).container }
 
     private val service: RetrofitService by inject()
-    private lateinit var adapter: TimelinesAdapter
+    private lateinit var adapter: QuizOptionsAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = TimelinesAdapter()
+        adapter = QuizOptionsAdapter()
         timelines.adapter = adapter
         timelines.layoutManager = LinearLayoutManager(context)
         adapter.onTimelineClicked = this::onTimelineClicked

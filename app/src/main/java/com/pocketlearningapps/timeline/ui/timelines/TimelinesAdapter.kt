@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Timeline
+import com.pocketlearningapps.timeline.lib.ViewHolderFactory
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -28,9 +29,9 @@ private val medalColors = mapOf(
     3 to R.color.colorGold
 )
 
-class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
-
+class TimelinesAdapter : RecyclerView.Adapter<TimelineViewHolder>() {
     private val data = mutableListOf<Timeline>()
+    private val factory = TimelineViewHolderFactory()
 
     var onTimelineClicked: OnTimelineClickHandler? = null
 
@@ -40,7 +41,7 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_timeline, parent, false)
 
@@ -50,19 +51,40 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
             onTimelineClicked?.invoke(timeline)
         }
 
-        return ViewHolder(view)
+        return factory.createViewHolder(view)
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) {
         val timeline = data.get(position)
+        factory.bindHolder(holder, timeline, data, position)
+    }
+}
+
+class TimelineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val title: TextView = itemView.findViewById(R.id.timeline_title)
+    var description: TextView = itemView.findViewById(R.id.timeline_description)
+    val medal: ImageView = itemView.findViewById(R.id.medal)
+}
+
+class TimelineViewHolderFactory : ViewHolderFactory<Timeline, TimelineViewHolder> {
+    override fun createViewHolder(view: View): TimelineViewHolder {
+        return TimelineViewHolder(view)
+    }
+
+    override fun bindHolder(
+        holder: TimelineViewHolder,
+        item: Timeline,
+        items: List<Timeline>,
+        position: Int
+    ) {
         holder.itemView.tag = position
-        holder.title.text = timeline.title
-        holder.description.text = timeline.description
-        val medalColorRes = medalColors[timeline.level]
+        holder.title.text = item.title
+        holder.description.text = item.description
+        val medalColorRes = medalColors[item.level]
         if (medalColorRes != null) {
             holder.medal.isVisible = true
             val medalColor = getColor(holder.medal.context, medalColorRes)
@@ -72,13 +94,5 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         } else {
             holder.medal.isVisible = false
         }
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        val title: TextView = itemView.findViewById(R.id.timeline_title)
-        var description: TextView = itemView.findViewById(R.id.timeline_description)
-        val medal: ImageView = itemView.findViewById(R.id.medal)
     }
 }
