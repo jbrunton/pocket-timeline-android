@@ -1,11 +1,17 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
 import android.content.Intent
+import android.graphics.PorterDuff.Mode.SRC_IN
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatRatingBar
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getColorStateList
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
@@ -15,6 +21,12 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 typealias OnTimelineClickHandler = (timeline: Timeline) -> Unit
+
+private val medalColors = mapOf(
+    1 to R.color.colorBronze,
+    2 to R.color.colorSilver,
+    3 to R.color.colorGold
+)
 
 class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
 
@@ -50,7 +62,16 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         holder.itemView.tag = position
         holder.title.text = timeline.title
         holder.description.text = timeline.description
-        holder.rating.rating = timeline.starRating
+        val medalColorRes = medalColors[timeline.level]
+        if (medalColorRes != null) {
+            holder.medal.isVisible = true
+            val medalColor = getColor(holder.medal.context, medalColorRes)
+            val medalColorStateList = getColorStateList(holder.medal.context, medalColorRes)
+            holder.medal.setColorFilter(medalColor, SRC_IN)
+            holder.medal.backgroundTintList = medalColorStateList
+        } else {
+            holder.medal.isVisible = false
+        }
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -58,6 +79,6 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         // for any view that will be set as you render a row
         val title: TextView = itemView.findViewById(R.id.timeline_title)
         var description: TextView = itemView.findViewById(R.id.timeline_description)
-        val rating: AppCompatRatingBar = itemView.findViewById(R.id.score)
+        val medal: ImageView = itemView.findViewById(R.id.medal)
     }
 }
