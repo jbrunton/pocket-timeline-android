@@ -6,7 +6,7 @@ import kotlin.math.roundToInt
 
 val sampleRatings = listOf(
     Rating(1, 0.85f),
-    Rating(2, 0.82f),
+    Rating(2, 0.76f),
     Rating(3, 0.4f)
 )
 

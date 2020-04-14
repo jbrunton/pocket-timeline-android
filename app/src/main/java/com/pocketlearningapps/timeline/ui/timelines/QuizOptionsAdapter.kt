@@ -76,7 +76,7 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val level = position % 4
             holder.levelName.text = "Level ${level}"
 
-            val locked = level > timeline.level
+            val locked = level > timeline.level + 1
             if (locked) {
                 holder.lockIcon.isVisible = true
                 holder.rating.isVisible = false
