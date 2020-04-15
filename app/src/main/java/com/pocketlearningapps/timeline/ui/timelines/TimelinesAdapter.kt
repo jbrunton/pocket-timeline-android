@@ -11,6 +11,7 @@ import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getColorStateList
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketlearningapps.timeline.R
@@ -87,9 +88,10 @@ class TimelineViewHolderFactory : ViewHolderFactory<Timeline, TimelineViewHolder
         val medalColorRes = medalColors[item.level]
         if (medalColorRes != null) {
             holder.medal.isVisible = true
-            val medalColor = getColor(holder.medal.context, medalColorRes)
+            //val medalColor = getColor(holder.medal.context, medalColorRes)
+            //val medalColor = ColorUtils.setAlphaComponent(baseMedalColor, 100)
             val medalColorStateList = getColorStateList(holder.medal.context, medalColorRes)
-            holder.medal.setColorFilter(medalColor, SRC_IN)
+            //holder.medal.setColorFilter(medalColor, SRC_IN)
             holder.medal.backgroundTintList = medalColorStateList
         } else {
             holder.medal.isVisible = false

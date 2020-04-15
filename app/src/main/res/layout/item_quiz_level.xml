@@ -20,7 +20,7 @@
     <androidx.appcompat.widget.AppCompatRatingBar
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:id="@+id/rating"
-        tools:rating="3"
+        tools:progress="65"
         android:progressTint="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
