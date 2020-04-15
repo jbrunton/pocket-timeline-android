@@ -1,24 +1,33 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
 import android.content.Intent
+import android.graphics.PorterDuff.Mode.SRC_IN
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatRatingBar
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getColorStateList
+import androidx.core.graphics.ColorUtils
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Event
+import com.pocketlearningapps.timeline.entities.Medal
 import com.pocketlearningapps.timeline.entities.Timeline
+import com.pocketlearningapps.timeline.lib.ViewHolderFactory
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
 typealias OnTimelineClickHandler = (timeline: Timeline) -> Unit
 
-class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
-
+class TimelinesAdapter : RecyclerView.Adapter<TimelineViewHolder>() {
     private val data = mutableListOf<Timeline>()
+    private val factory = TimelineViewHolderFactory()
 
     var onTimelineClicked: OnTimelineClickHandler? = null
 
@@ -28,7 +37,7 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_timeline, parent, false)
 
@@ -38,26 +47,46 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelinesAdapter.ViewHolder>() {
             onTimelineClicked?.invoke(timeline)
         }
 
-        return ViewHolder(view)
+        return factory.createViewHolder(view)
     }
 
     override fun getItemCount(): Int {
         return data.size
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) {
         val timeline = data.get(position)
-        holder.itemView.tag = position
-        holder.title.text = timeline.title
-        holder.description.text = timeline.description
-        holder.rating.rating = timeline.starRating
+        factory.bindHolder(holder, timeline, data, position)
+    }
+}
+
+class TimelineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val title: TextView = itemView.findViewById(R.id.timeline_title)
+    var description: TextView = itemView.findViewById(R.id.timeline_description)
+    val medal: ImageView = itemView.findViewById(R.id.medal)
+}
+
+class TimelineViewHolderFactory : ViewHolderFactory<Timeline, TimelineViewHolder> {
+    override fun createViewHolder(view: View): TimelineViewHolder {
+        return TimelineViewHolder(view)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        val title: TextView = itemView.findViewById(R.id.timeline_title)
-        var description: TextView = itemView.findViewById(R.id.timeline_description)
-        val rating: AppCompatRatingBar = itemView.findViewById(R.id.score)
+    override fun bindHolder(
+        holder: TimelineViewHolder,
+        item: Timeline,
+        items: List<Timeline>,
+        position: Int
+    ) {
+        holder.itemView.tag = position
+        holder.title.text = item.title
+        holder.description.text = item.description
+        val medalColorRes = Medal.BRONZE
+        if (medalColorRes != null) {
+            holder.medal.isVisible = true
+            val medalColorStateList = getColorStateList(holder.medal.context, medalColorRes.color)
+            holder.medal.backgroundTintList = medalColorStateList
+        } else {
+            holder.medal.isVisible = false
+        }
     }
 }

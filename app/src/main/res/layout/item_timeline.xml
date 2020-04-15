@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="8dp">
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
 
     <TextView
         android:id="@+id/timeline_title"
@@ -25,13 +26,17 @@
         android:layout_below="@id/timeline_title"
         tools:text="Events of World War 2" />
 
-    <androidx.appcompat.widget.AppCompatRatingBar
-        android:id="@+id/score"
+    <ImageView
+        android:src="@drawable/ic_medal_24dp"
+        android:id="@+id/medal"
+        android:tint="#FFF"
+        android:backgroundTint="@color/colorGold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:background="@drawable/glossy_border"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        style="@style/Widget.AppCompat.RatingBar.Small"
         />
 
 </RelativeLayout>

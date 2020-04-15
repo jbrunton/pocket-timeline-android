@@ -16,7 +16,7 @@ data class UserResponse(
     val email: String?
 )
 
-data class Rating(
+data class Score(
     @SerializedName("timeline_id") val timelineId: String,
     @SerializedName("normalized_score") val normalizedScore: Float
 )
@@ -51,5 +51,5 @@ interface RetrofitService {
         "Content-Type: application/json"
     )
     @POST("/ratings/score")
-    suspend fun ratingsScore(@Body rating: Rating): JsonElement
+    suspend fun ratingsScore(@Body score: Score): JsonElement
 }

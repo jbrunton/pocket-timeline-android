@@ -1,23 +1,20 @@
 package com.pocketlearningapps.timeline.entities
 
-import com.google.gson.annotations.SerializedName
-import kotlin.math.max
-import kotlin.math.roundToInt
-
 data class Timeline(
     val id: String,
     val title: String,
     val description: String?,
     val events: List<Event>?,
-    @SerializedName("normalized_score") val normalizedScore: Float?
+    val ratings: List<Rating>?
 ) {
-    val starRating: Float get() {
-        return if (normalizedScore == null) {
-            // 0 means no rating
-            0f
-        } else {
-            // otherwise, a 1-5 rating
-            max( normalizedScore * 5, 1f)
-        }
+    val level: Int get() {
+        return ratings
+            ?.filter { it.normalizedScore ?: 0f >= 0.75f }
+            ?.map { it.level }
+            ?.max() ?: 0
+    }
+
+    fun levelRating(level: Int): Rating {
+        return ratings?.find { it.level == level } ?: Rating(level, null, false)
     }
 }

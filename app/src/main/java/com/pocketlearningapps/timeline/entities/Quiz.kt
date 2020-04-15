@@ -1,13 +1,14 @@
 package com.pocketlearningapps.timeline.entities
 
-import com.pocketlearningapps.timeline.network.Rating
+import com.pocketlearningapps.timeline.network.Score
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 private const val QUIZ_LENGTH = 3
 
 class Quiz(
-    private val timeline: Timeline
+    private val timeline: Timeline,
+    private val level: Int
 ) {
     var totalQuestions = 0
         private set
@@ -30,7 +31,7 @@ class Quiz(
         }
 
         val event = timeline.events!!.get(Random.nextInt(timeline.events.size))
-        currentQuestion = if (Random.nextBoolean()) {
+        currentQuestion = if (level > 1) {
             Question.WhatDateQuestion(timeline, event)
         } else {
             Question.WhichEventQuestion(timeline, event, pickEventOptions(timeline.events, event))
@@ -39,14 +40,14 @@ class Quiz(
         return currentQuestion
     }
 
-    fun submitAnswer(answer: Any?, submitScore: (Rating) -> Unit): Boolean {
+    fun submitAnswer(answer: Any?, submitScore: (Score) -> Unit): Boolean {
         val correct = currentQuestion.validate(answer)
         if (correct) {
             correctQuestions += 1
         }
         totalQuestions += 1
         if (isComplete) {
-            submitScore(Rating(timeline.id, normalizedScore))
+            submitScore(Score(timeline.id, normalizedScore))
         }
         else {
             nextQuestion()

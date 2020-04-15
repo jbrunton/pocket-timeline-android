@@ -8,7 +8,7 @@ import com.pocketlearningapps.timeline.entities.Question
 import com.pocketlearningapps.timeline.entities.Quiz
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
-import com.pocketlearningapps.timeline.network.Rating
+import com.pocketlearningapps.timeline.network.Score
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -79,10 +79,10 @@ class QuizViewModel(
     private lateinit var quiz: Quiz
     private val viewStateFactory = QuizViewStateFactory()
 
-    fun initialize(timelineId: String) {
+    fun initialize(timelineId: String, level: Int) {
         viewModelScope.launch {
             val timeline = service.timeline(timelineId)
-            quiz = Quiz(timeline)
+            quiz = Quiz(timeline, level)
             nextQuestion()
         }
     }
@@ -162,9 +162,9 @@ class QuizViewModel(
         }
     }
 
-    private fun submitScore(rating: Rating) {
+    private fun submitScore(score: Score) {
         viewModelScope.launch {
-            service.ratingsScore(rating)
+            service.ratingsScore(score)
         }
     }
 }
