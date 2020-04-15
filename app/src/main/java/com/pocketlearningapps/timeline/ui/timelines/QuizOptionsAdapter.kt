@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
 import com.pocketlearningapps.timeline.R
+import com.pocketlearningapps.timeline.entities.Category
 import com.pocketlearningapps.timeline.entities.Medal
 import com.pocketlearningapps.timeline.entities.Timeline
 
@@ -20,18 +21,38 @@ typealias OnQuizOptionClickHandler = (timeline: Timeline, level: Int) -> Unit
 
 class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
-        const val TYPE_HEADER = 0
-        const val TYPE_ITEM = 1
+        internal const val TYPE_HEADER = 0
+        internal const val TYPE_ITEM = 1
     }
 
-    private val data = mutableListOf<Timeline>()
+    internal sealed class QuizOptionItem {
+        abstract val adapterType: Int
+
+        data class Header(val timeline: Timeline) : QuizOptionItem() {
+            override val adapterType = TYPE_HEADER
+        }
+
+        data class Item(val category: Category) : QuizOptionItem() {
+            override val adapterType = TYPE_ITEM
+        }
+    }
+
+
+
+    private val data = mutableListOf<QuizOptionItem>()
     private val timelineViewHolderFactory = TimelineViewHolderFactory()
 
     var onQuizOptionClicked: OnQuizOptionClickHandler? = null
 
     fun setData(items: Collection<Timeline>) {
         this.data.clear()
-        this.data.addAll(items)
+        items.forEach { timeline ->
+            this.data.add(QuizOptionItem.Header(timeline))
+            val categories = timeline.categories
+            if (categories != null) {
+                this.data.addAll(categories.map { QuizOptionItem.Item(it) })
+            }
+        }
         notifyDataSetChanged()
     }
 
@@ -44,7 +65,7 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         } else {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_quiz_level, parent, false)
+                .inflate(R.layout.item_quiz_category, parent, false)
 
             view.setOnClickListener {
                 val position = view.tag as Int
@@ -59,27 +80,23 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return data.size * 4 // 3 levels + 1 header for each item
+        return data.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position % 4 == 0) {
-            TYPE_HEADER
-        } else {
-            TYPE_ITEM
-        }
+        return data.get(position).adapterType
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val timelineIndex = position / 4
-        val timeline = data.get(timelineIndex)
-
         if (holder is TimelineViewHolder) {
-            timelineViewHolderFactory.bindHolder(holder, timeline, data, timelineIndex)
+            val header = data.get(position) as QuizOptionItem.Header
+            val timeline = header.timeline
+            timelineViewHolderFactory.bindHolder(holder, timeline, position)
         } else if (holder is ItemViewHolder) {
+            val item = data.get(position) as QuizOptionItem.Item
             holder.itemView.tag = position
-            val level = position % 4
-            holder.levelName.text = "Level ${level}"
+            holder.categoryName.text = item.category.name
+            val level = item.category.level
 
             val context = holder.itemView.context
 
@@ -114,8 +131,7 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val levelName: TextView = itemView.findViewById(R.id.level_name)
+        val categoryName: TextView = itemView.findViewById(R.id.category_name)
         val icon: ImageView = itemView.findViewById(R.id.icon)
-        val gpa: Chip = itemView.findViewById(R.id.gpa)
     }
 }

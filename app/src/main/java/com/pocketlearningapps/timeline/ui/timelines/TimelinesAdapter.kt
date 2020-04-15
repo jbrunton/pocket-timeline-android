@@ -56,7 +56,7 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelineViewHolder>() {
 
     override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) {
         val timeline = data.get(position)
-        factory.bindHolder(holder, timeline, data, position)
+        factory.bindHolder(holder, timeline, position)
     }
 }
 
@@ -74,7 +74,6 @@ class TimelineViewHolderFactory : ViewHolderFactory<Timeline, TimelineViewHolder
     override fun bindHolder(
         holder: TimelineViewHolder,
         item: Timeline,
-        items: List<Timeline>,
         position: Int
     ) {
         holder.itemView.tag = position
