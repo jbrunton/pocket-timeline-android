@@ -34,7 +34,7 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
         adapter = QuizOptionsAdapter()
         timelines.adapter = adapter
         timelines.layoutManager = LinearLayoutManager(context)
-        adapter.onTimelineClicked = this::onTimelineClicked
+        adapter.onQuizOptionClicked = this::onQuizOptionClicked
 
         refreshData()
     }
@@ -46,9 +46,10 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
         }
     }
 
-    private fun onTimelineClicked(timeline: Timeline) {
+    private fun onQuizOptionClicked(timeline: Timeline, level: Int) {
         val intent = Intent(requireContext(), QuizActivity::class.java).apply {
             putExtra("TIMELINE_ID", timeline.id)
+            putExtra("LEVEL", level)
         }
         startActivityForResult(intent, REQUEST_CODE)
     }

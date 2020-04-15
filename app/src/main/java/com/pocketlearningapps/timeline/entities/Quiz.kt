@@ -7,7 +7,8 @@ import kotlin.random.Random
 private const val QUIZ_LENGTH = 3
 
 class Quiz(
-    private val timeline: Timeline
+    private val timeline: Timeline,
+    private val level: Int
 ) {
     var totalQuestions = 0
         private set
@@ -30,7 +31,7 @@ class Quiz(
         }
 
         val event = timeline.events!!.get(Random.nextInt(timeline.events.size))
-        currentQuestion = if (Random.nextBoolean()) {
+        currentQuestion = if (level > 1) {
             Question.WhatDateQuestion(timeline, event)
         } else {
             Question.WhichEventQuestion(timeline, event, pickEventOptions(timeline.events, event))

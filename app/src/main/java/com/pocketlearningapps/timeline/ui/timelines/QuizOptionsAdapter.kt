@@ -27,7 +27,7 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val data = mutableListOf<Timeline>()
     private val timelineViewHolderFactory = TimelineViewHolderFactory()
 
-    var onTimelineClicked: OnTimelineClickHandler? = null
+    var onQuizOptionClicked: OnQuizOptionClickHandler? = null
 
     fun setData(items: Collection<Timeline>) {
         this.data.clear()
@@ -45,6 +45,14 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         } else {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_quiz_level, parent, false)
+
+            view.setOnClickListener {
+                val position = view.tag as Int
+                val timelineIndex = position / 4
+                val timeline = data.get(timelineIndex)
+                val level = position % 4
+                onQuizOptionClicked?.invoke(timeline, level)
+            }
 
             return ItemViewHolder(view)
         }
@@ -69,6 +77,7 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if (holder is TimelineViewHolder) {
             timelineViewHolderFactory.bindHolder(holder, timeline, data, timelineIndex)
         } else if (holder is ItemViewHolder) {
+            holder.itemView.tag = position
             val level = position % 4
             holder.levelName.text = "Level ${level}"
 

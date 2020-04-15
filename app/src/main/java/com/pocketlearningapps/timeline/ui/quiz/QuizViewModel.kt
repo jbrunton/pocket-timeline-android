@@ -79,10 +79,10 @@ class QuizViewModel(
     private lateinit var quiz: Quiz
     private val viewStateFactory = QuizViewStateFactory()
 
-    fun initialize(timelineId: String) {
+    fun initialize(timelineId: String, level: Int) {
         viewModelScope.launch {
             val timeline = service.timeline(timelineId)
-            quiz = Quiz(timeline)
+            quiz = Quiz(timeline, level)
             nextQuestion()
         }
     }
