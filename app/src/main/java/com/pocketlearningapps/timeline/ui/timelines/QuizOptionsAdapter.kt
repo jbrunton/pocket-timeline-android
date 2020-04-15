@@ -1,12 +1,10 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
-import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
@@ -71,53 +69,34 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             val level = position % 4
             holder.levelName.text = "Level ${level}"
 
-            val locked = level > timeline.level + 1
             val context = holder.itemView.context
+
+            val locked = level > timeline.level + 1
+            holder.icon.visibility = View.VISIBLE
             if (locked) {
-                holder.icon.visibility = View.VISIBLE
                 holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock_black_24dp))
-                holder.icon.background = null
-                holder.icon.backgroundTintList = null
-                holder.icon.setColorFilter(ContextCompat.getColor(context, android.R.color.darker_gray))
+                holder.icon.backgroundTintList = ContextCompat.getColorStateList(context, android.R.color.white)
+                holder.icon.imageTintList = ContextCompat.getColorStateList(context, android.R.color.darker_gray)
                 holder.gpa.isVisible = false
             } else {
+                holder.gpa.isVisible = true
                 val rating = timeline.levelRating(level)
-                if (rating.gpa != null) {
-                    holder.gpa.isVisible = true
-                    holder.gpa.text = rating.gpaString
-                } else {
-                    holder.gpa.isVisible = false
-                }
-
                 val medal = Medal.forGpa(rating.gpa)
                 if (medal != null) {
-                    val medalColor = ContextCompat.getColor(context, medal.color)
                     val medalColorStateList = ContextCompat.getColorStateList(context, medal.color)
-                    val whiteColor = ContextCompat.getColor(context, android.R.color.white)
-                    val whiteColorStateList = ContextCompat.getColorStateList(context, android.R.color.white)
-
-                    holder.levelName.setTextColor(whiteColor)
-                    holder.gpa.chipBackgroundColor = whiteColorStateList
-                    holder.gpa.setTextColor(medalColor)
-
-                    holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.rounded_border)
-                    holder.itemView.backgroundTintList = medalColorStateList
-
-                    holder.icon.visibility = View.VISIBLE
                     holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
-                    holder.icon.background = ContextCompat.getDrawable(context, R.drawable.rounded_border)
-                    holder.icon.setColorFilter(medalColor, PorterDuff.Mode.SRC_IN)
-                    holder.icon.backgroundTintList = whiteColorStateList
+                    holder.icon.backgroundTintList = medalColorStateList
                 } else {
                     holder.icon.visibility = View.INVISIBLE
                 }
+                holder.gpa.text = rating.gpaString
             }
         }
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val levelName: TextView = itemView.findViewById(R.id.level_name)
-        val gpa: Chip = itemView.findViewById(R.id.gpa)
         val icon: ImageView = itemView.findViewById(R.id.icon)
+        val gpa: Chip = itemView.findViewById(R.id.gpa)
     }
 }
