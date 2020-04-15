@@ -23,7 +23,8 @@ enum class Medal(@ColorRes val color: Int) {
 
 data class Rating(
     val level: Int,
-    @SerializedName("normalized_score") val normalizedScore: Float?
+    @SerializedName("normalized_score") val normalizedScore: Float?,
+    val unlocked: Boolean
 ) {
     val starRating: Float get() {
         return if (normalizedScore == null) {
