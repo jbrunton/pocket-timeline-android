@@ -6,7 +6,7 @@ import kotlin.math.roundToInt
 
 val sampleRatings = listOf(
     Rating(1, 0.85f),
-    Rating(2, 0.76f),
+    Rating(2, 0.69f),
     Rating(3, 0.4f)
 )
 
@@ -19,12 +19,12 @@ data class Timeline(
 ) {
     val level: Int get() {
         return (ratings ?: sampleRatings)
-            .filter { it.normalizedScore ?: 0f >= 0.8f }
+            .filter { it.normalizedScore ?: 0f >= 0.75f }
             .map { it.level }
             .max() ?: 0
     }
 
-    fun levelRating(level: Int): Rating? {
-        return (ratings ?: sampleRatings).find { it.level == level }
+    fun levelRating(level: Int): Rating {
+        return (ratings ?: sampleRatings).find { it.level == level } ?: Rating(level, null)
     }
 }

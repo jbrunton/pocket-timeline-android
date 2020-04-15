@@ -1,7 +1,6 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
-import android.content.Intent
-import android.graphics.PorterDuff.Mode.SRC_IN
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,16 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatRatingBar
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getColor
-import androidx.core.content.ContextCompat.getColorStateList
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.pocketlearningapps.timeline.R
-import com.pocketlearningapps.timeline.entities.Event
+import com.pocketlearningapps.timeline.entities.Medal
 import com.pocketlearningapps.timeline.entities.Timeline
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.roundToInt
 
 typealias OnQuizOptionClickHandler = (timeline: Timeline, level: Int) -> Unit
 
@@ -77,20 +72,52 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             holder.levelName.text = "Level ${level}"
 
             val locked = level > timeline.level + 1
+            val context = holder.itemView.context
             if (locked) {
-                holder.lockIcon.isVisible = true
-                holder.rating.isVisible = false
+                holder.icon.visibility = View.VISIBLE
+                holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock_black_24dp))
+                holder.icon.background = null
+                holder.icon.backgroundTintList = null
+                holder.icon.setColorFilter(ContextCompat.getColor(context, android.R.color.darker_gray))
+                holder.gpa.isVisible = false
             } else {
-                holder.lockIcon.isVisible = false
-                holder.rating.isVisible = true
-                holder.rating.rating = timeline.levelRating(level)?.starRating ?: 0f
+                val rating = timeline.levelRating(level)
+                if (rating.gpa != null) {
+                    holder.gpa.isVisible = true
+                    holder.gpa.text = rating.gpaString
+                } else {
+                    holder.gpa.isVisible = false
+                }
+
+                val medal = Medal.forGpa(rating.gpa)
+                if (medal != null) {
+                    val medalColor = ContextCompat.getColor(context, medal.color)
+                    val medalColorStateList = ContextCompat.getColorStateList(context, medal.color)
+                    val whiteColor = ContextCompat.getColor(context, android.R.color.white)
+                    val whiteColorStateList = ContextCompat.getColorStateList(context, android.R.color.white)
+
+                    holder.levelName.setTextColor(whiteColor)
+                    holder.gpa.chipBackgroundColor = whiteColorStateList
+                    holder.gpa.setTextColor(medalColor)
+
+                    holder.itemView.background = ContextCompat.getDrawable(context, R.drawable.rounded_border)
+                    holder.itemView.backgroundTintList = medalColorStateList
+
+                    holder.icon.visibility = View.VISIBLE
+                    holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
+                    holder.icon.background = ContextCompat.getDrawable(context, R.drawable.rounded_border)
+                    holder.icon.setColorFilter(medalColor, PorterDuff.Mode.SRC_IN)
+                    holder.icon.backgroundTintList = whiteColorStateList
+                } else {
+                    holder.icon.visibility = View.INVISIBLE
+                }
             }
         }
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val levelName: TextView = itemView.findViewById(R.id.level_name)
-        val rating: AppCompatRatingBar = itemView.findViewById(R.id.rating)
-        val lockIcon: ImageView = itemView.findViewById(R.id.lock_icon)
+        val gpa: Chip = itemView.findViewById(R.id.gpa)
+        val icon: ImageView = itemView.findViewById(R.id.icon)
     }
 }
