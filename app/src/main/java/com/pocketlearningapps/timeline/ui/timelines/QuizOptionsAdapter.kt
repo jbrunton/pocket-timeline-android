@@ -94,10 +94,7 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         medalColor
                     )
 
-                    //layout.setBackgroundDrawable(gd);
-                    val medalColorStateList = ContextCompat.getColorStateList(context, medal.color)
                     holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
-                    //holder.icon.backgroundTintList = null
                     holder.icon.background = medalBackround
                 } else {
                     holder.icon.visibility = View.INVISIBLE

@@ -1,6 +1,6 @@
 package com.pocketlearningapps.timeline.entities
 
-import com.pocketlearningapps.timeline.network.Rating
+import com.pocketlearningapps.timeline.network.Score
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -39,14 +39,14 @@ class Quiz(
         return currentQuestion
     }
 
-    fun submitAnswer(answer: Any?, submitScore: (Rating) -> Unit): Boolean {
+    fun submitAnswer(answer: Any?, submitScore: (Score) -> Unit): Boolean {
         val correct = currentQuestion.validate(answer)
         if (correct) {
             correctQuestions += 1
         }
         totalQuestions += 1
         if (isComplete) {
-            submitScore(Rating(timeline.id, normalizedScore))
+            submitScore(Score(timeline.id, normalizedScore))
         }
         else {
             nextQuestion()
