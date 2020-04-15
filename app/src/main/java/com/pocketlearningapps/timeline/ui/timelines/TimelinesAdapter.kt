@@ -82,8 +82,8 @@ class TimelineViewHolderFactory : ViewHolderFactory<Timeline, TimelineViewHolder
         val medalColorRes = Medal.BRONZE
         if (medalColorRes != null) {
             holder.medal.isVisible = true
-            val medalColorStateList = getColorStateList(holder.medal.context, medalColorRes.color)
-            holder.medal.backgroundTintList = medalColorStateList
+//            val medalColorStateList = getColorStateList(holder.medal.context, medalColorRes.color)
+//            holder.medal.backgroundTintList = medalColorStateList
         } else {
             holder.medal.isVisible = false
         }

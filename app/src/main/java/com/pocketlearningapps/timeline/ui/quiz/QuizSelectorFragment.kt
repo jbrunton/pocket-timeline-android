@@ -11,6 +11,7 @@ import com.jbrunton.inject.Container
 import com.jbrunton.inject.HasContainer
 import com.jbrunton.inject.inject
 import com.pocketlearningapps.timeline.R
+import com.pocketlearningapps.timeline.entities.Category
 import com.pocketlearningapps.timeline.entities.Timeline
 import com.pocketlearningapps.timeline.network.RetrofitService
 import com.pocketlearningapps.timeline.ui.timelines.QuizOptionsAdapter
@@ -46,9 +47,9 @@ class QuizSelectorFragment : Fragment(R.layout.fragment_quiz_selector), HasConta
         }
     }
 
-    private fun onQuizOptionClicked(timeline: Timeline, level: Int) {
+    private fun onQuizOptionClicked(category: Category, level: Int) {
         val intent = Intent(requireContext(), QuizActivity::class.java).apply {
-            putExtra("TIMELINE_ID", timeline.id)
+            putExtra("CATEGORY_ID", category.id)
             putExtra("LEVEL", level)
         }
         startActivityForResult(intent, REQUEST_CODE)

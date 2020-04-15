@@ -17,7 +17,7 @@ import com.pocketlearningapps.timeline.entities.Category
 import com.pocketlearningapps.timeline.entities.Medal
 import com.pocketlearningapps.timeline.entities.Timeline
 
-typealias OnQuizOptionClickHandler = (timeline: Timeline, level: Int) -> Unit
+typealias OnQuizOptionClickHandler = (category: Category, level: Int) -> Unit
 
 class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
@@ -69,10 +69,8 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             view.setOnClickListener {
                 val position = view.tag as Int
-                val timelineIndex = position / 4
-                val timeline = data.get(timelineIndex)
-                val level = position % 4
-                onQuizOptionClicked?.invoke(timeline, level)
+                val item = data.get(position) as QuizOptionItem.Item
+                onQuizOptionClicked?.invoke(item.category, item.category.level)
             }
 
             return ItemViewHolder(view)
@@ -94,44 +92,30 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             timelineViewHolderFactory.bindHolder(holder, timeline, position)
         } else if (holder is ItemViewHolder) {
             val item = data.get(position) as QuizOptionItem.Item
+            val category = item.category
             holder.itemView.tag = position
-            holder.categoryName.text = item.category.name
-            val level = item.category.level
+            holder.categoryName.text = category.name
 
             val context = holder.itemView.context
 
-            val locked = level > timeline.level + 1
             holder.icon.visibility = View.VISIBLE
-            if (locked) {
-                holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock_black_24dp))
-                holder.icon.backgroundTintList = ContextCompat.getColorStateList(context, android.R.color.white)
-                holder.icon.imageTintList = ContextCompat.getColorStateList(context, android.R.color.darker_gray)
-                holder.gpa.isVisible = false
+            val rating = category.levelRating(category.level)
+            val medal = Medal.forGpa(rating.gpa)
+            if (medal != null) {
+                val medalColorList = ContextCompat.getColorStateList(context, medal.color)
+                val medalBackround = ContextCompat.getDrawable(context, medal.background)
+                holder.icon.background = medalBackround
+                holder.icon.imageTintList = medalColorList
             } else {
-                holder.gpa.isVisible = true
-                val rating = timeline.levelRating(level)
-                val medal = Medal.forGpa(rating.gpa)
-                if (medal != null) {
-                    val medalColor = ContextCompat.getColor(context, medal.color)
-                    val medalBackround = holder.icon.background as GradientDrawable
-                    medalBackround.colors = intArrayOf(
-                        medalColor,
-                        ColorUtils.blendARGB(medalColor, Color.WHITE, 0.5f),
-                        medalColor
-                    )
-
-                    holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
-                    holder.icon.background = medalBackround
-                } else {
-                    holder.icon.visibility = View.INVISIBLE
-                }
-                holder.gpa.text = rating.gpaString
+                holder.icon.visibility = View.INVISIBLE
             }
+            holder.categoryLevel.text = "Level ${category.level}"
         }
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryName: TextView = itemView.findViewById(R.id.category_name)
+        val categoryLevel: TextView = itemView.findViewById(R.id.category_level)
         val icon: ImageView = itemView.findViewById(R.id.icon)
     }
 }

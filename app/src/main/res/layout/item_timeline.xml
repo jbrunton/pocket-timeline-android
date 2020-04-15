@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:background="@drawable/glossy_border"
+        android:background="@drawable/medal_background_gold"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         />
