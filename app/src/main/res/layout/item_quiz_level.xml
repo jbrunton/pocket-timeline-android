@@ -24,9 +24,8 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/level_name"
         android:src="@drawable/ic_medal_24dp"
-        android:background="@drawable/rounded_border"
+        android:background="@drawable/glossy_border"
         android:tint="@android:color/white"
-        android:backgroundTint="@color/colorGold"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         />

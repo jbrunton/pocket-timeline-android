@@ -1,11 +1,14 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
@@ -83,9 +86,19 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 val rating = timeline.levelRating(level)
                 val medal = Medal.forGpa(rating.gpa)
                 if (medal != null) {
+                    val medalColor = ContextCompat.getColor(context, medal.color)
+                    val medalBackround = holder.icon.background as GradientDrawable
+                    medalBackround.colors = intArrayOf(
+                        medalColor,
+                        ColorUtils.blendARGB(medalColor, Color.WHITE, 0.5f),
+                        medalColor
+                    )
+
+                    //layout.setBackgroundDrawable(gd);
                     val medalColorStateList = ContextCompat.getColorStateList(context, medal.color)
                     holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
-                    holder.icon.backgroundTintList = medalColorStateList
+                    //holder.icon.backgroundTintList = null
+                    holder.icon.background = medalBackround
                 } else {
                     holder.icon.visibility = View.INVISIBLE
                 }
