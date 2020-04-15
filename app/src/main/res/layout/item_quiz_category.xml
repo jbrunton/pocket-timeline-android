@@ -15,30 +15,46 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        tools:text="The early days" />
+        tools:text="America enters the war" />
 
-    <TextView
-        android:id="@+id/category_level"
-        style="@style/TextAppearance.MaterialComponents.Caption"
-        android:textColor="@color/colorPrimary"
+    <ImageView
+        android:id="@+id/icon_level_1"
+        android:padding="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/icon"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="@dimen/margin"
-        tools:text="Level 1"
+        android:layout_toStartOf="@id/icon_level_2"
+        android:src="@drawable/ic_medal_24dp"
+        android:background="@drawable/medal_background_gold"
+        android:tint="@color/colorGold"
+        android:layout_marginEnd="8dp"
         />
 
     <ImageView
-        android:id="@+id/icon"
+        android:id="@+id/icon_level_2"
+        android:padding="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@id/icon_level_3"
+        android:src="@drawable/ic_play_arrow_black_24dp"
+        android:tint="@color/colorAccent"
+        android:background="@drawable/medal_border"
+        android:backgroundTint="@color/colorGreyLight"
+        android:layout_marginEnd="8dp"
+        />
+
+    <ImageView
+        android:id="@+id/icon_level_3"
         android:padding="2dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_medal_24dp"
-        android:background="@drawable/medal_background_gold"
-        android:tint="@color/colorGold"
+        android:src="@drawable/ic_lock_black_24dp"
+        android:tint="@color/colorGreyLight"
+        android:background="@drawable/medal_border"
+        android:backgroundTint="@color/colorGreyLight"
         />
 
 </RelativeLayout>

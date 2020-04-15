@@ -63,7 +63,6 @@ class TimelinesAdapter : RecyclerView.Adapter<TimelineViewHolder>() {
 class TimelineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val title: TextView = itemView.findViewById(R.id.timeline_title)
     var description: TextView = itemView.findViewById(R.id.timeline_description)
-    val medal: ImageView = itemView.findViewById(R.id.medal)
 }
 
 class TimelineViewHolderFactory : ViewHolderFactory<Timeline, TimelineViewHolder> {
@@ -79,13 +78,5 @@ class TimelineViewHolderFactory : ViewHolderFactory<Timeline, TimelineViewHolder
         holder.itemView.tag = position
         holder.title.text = item.title
         holder.description.text = item.description
-        val medalColorRes = Medal.BRONZE
-        if (medalColorRes != null) {
-            holder.medal.isVisible = true
-//            val medalColorStateList = getColorStateList(holder.medal.context, medalColorRes.color)
-//            holder.medal.backgroundTintList = medalColorStateList
-        } else {
-            holder.medal.isVisible = false
-        }
     }
 }

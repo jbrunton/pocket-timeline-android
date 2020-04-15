@@ -1,17 +1,12 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Category
 import com.pocketlearningapps.timeline.entities.Medal
@@ -98,24 +93,47 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             val context = holder.itemView.context
 
-            holder.icon.visibility = View.VISIBLE
-            val rating = category.levelRating(category.level)
-            val medal = Medal.forGpa(rating.gpa)
-            if (medal != null) {
-                val medalColorList = ContextCompat.getColorStateList(context, medal.color)
-                val medalBackround = ContextCompat.getDrawable(context, medal.background)
-                holder.icon.background = medalBackround
-                holder.icon.imageTintList = medalColorList
-            } else {
-                holder.icon.visibility = View.INVISIBLE
+            listOf(1, 2, 3).forEach { level ->
+                val icon = holder.iconForLevel(level)
+                val rating = category.levelRating(level)
+                val greyColorList = ContextCompat.getColorStateList(context, R.color.colorGreyLight)
+                if (rating.unlocked) {
+                    val medal = Medal.forGpa(rating.gpa)
+                    if (medal != null) {
+                        val medalColorList = ContextCompat.getColorStateList(context, medal.color)
+                        val medalBackround = ContextCompat.getDrawable(context, medal.background)
+                        icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
+                        icon.background = medalBackround
+                        icon.imageTintList = medalColorList
+                        icon.backgroundTintList = null
+                    } else {
+                        val accentColorList = ContextCompat.getColorStateList(context, R.color.colorAccent)
+                        icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_black_24dp))
+                        icon.background = ContextCompat.getDrawable(context, R.drawable.medal_border)
+                        icon.imageTintList = accentColorList
+                        icon.backgroundTintList = greyColorList
+                    }
+                } else {
+                    icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock_black_24dp))
+                    icon.background = ContextCompat.getDrawable(context, R.drawable.medal_border)
+                    icon.imageTintList = greyColorList
+                    icon.backgroundTintList = greyColorList
+                }
             }
-            holder.categoryLevel.text = "Level ${category.level}"
         }
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryName: TextView = itemView.findViewById(R.id.category_name)
-        val categoryLevel: TextView = itemView.findViewById(R.id.category_level)
-        val icon: ImageView = itemView.findViewById(R.id.icon)
+        val iconLevel1: ImageView = itemView.findViewById(R.id.icon_level_1)
+        val iconLevel2: ImageView = itemView.findViewById(R.id.icon_level_2)
+        val iconLevel3: ImageView = itemView.findViewById(R.id.icon_level_3)
+
+        fun iconForLevel(level: Int) = when (level) {
+            1 -> iconLevel1
+            2 -> iconLevel2
+            3 -> iconLevel3
+            else -> throw IllegalArgumentException("Unexpected level: $level")
+        }
     }
 }
