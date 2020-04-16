@@ -70,6 +70,7 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         progress_bar.setProgress(viewState.percentComplete)
         question_title.text = viewState.questionTitle
         question_details.text = viewState.questionDetails
+        category_description.text = viewState.categoryDescription
 
         what_date_content.isVisible = viewState.showWhatDateContent
         date_error.isVisible = viewState.whatDateContent.showError

@@ -27,6 +27,7 @@ data class WhichEventViewState(
 data class QuizViewState(
     val questionTitle: String,
     val questionDetails: String,
+    val categoryDescription: String,
     val showWhatDateContent: Boolean,
     val whatDateContent: WhatDateViewState,
     val showWhichEventContent: Boolean,
@@ -47,7 +48,8 @@ class QuizViewStateFactory {
                 showWhichEventContent = false,
                 whichEventContent = WhichEventViewState(emptyList(), UUID.randomUUID()),
                 submitEnabled = false,
-                percentComplete = percentComplete
+                percentComplete = percentComplete,
+                categoryDescription = question.category.description
             )
             is Question.WhichEventQuestion -> QuizViewState(
                 questionTitle = "Select the event that occurred on this date",
@@ -57,7 +59,8 @@ class QuizViewStateFactory {
                 showWhichEventContent = true,
                 whichEventContent = WhichEventViewState(question.options, UUID.randomUUID()),
                 submitEnabled = false,
-                percentComplete = percentComplete
+                percentComplete = percentComplete,
+                categoryDescription = question.category.description
             )
         }
     }
