@@ -10,7 +10,7 @@ sealed class Question {
     abstract val correctAnswer: String
 
     data class WhatDateQuestion(
-        val timeline: Timeline,
+        val category: Category,
         val event: Event
     ) : Question() {
         override fun validate(answer: Any?) = answer == event.date
@@ -18,7 +18,7 @@ sealed class Question {
     }
 
     data class WhichEventQuestion(
-        val timeline: Timeline,
+        val category: Category,
         val event: Event,
         val options: List<Event>
     ) : Question() {

@@ -2,6 +2,7 @@ package com.pocketlearningapps.timeline.network
 
 import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
+import com.pocketlearningapps.timeline.entities.Category
 import com.pocketlearningapps.timeline.entities.Timeline
 import retrofit2.http.*
 
@@ -17,7 +18,8 @@ data class UserResponse(
 )
 
 data class Score(
-    @SerializedName("timeline_id") val timelineId: String,
+    @SerializedName("category_id") val categoryId: String,
+    @SerializedName("level") val level: Int,
     @SerializedName("normalized_score") val normalizedScore: Float
 )
 
@@ -45,6 +47,9 @@ interface RetrofitService {
 
     @GET("/timelines/{id}")
     suspend fun timeline(@Path("id") id: String): Timeline
+
+    @GET("/categories/{id}")
+    suspend fun category(@Path("id") id: String): Category
 
     @Headers(
         "Accept: application/json",
