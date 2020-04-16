@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -84,6 +85,9 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
     }
 
     private fun updateDateInput(viewState: WhatDateViewState) {
+        val whiteColor = ContextCompat.getColor(this, android.R.color.white)
+        val backgroundColor = ContextCompat.getColor(this, R.color.colorAccentLight)
+
         date_error.isVisible = viewState.showError
         date_input_day.isEnabled = viewState.dayEditable
         date_input_day.setText(viewState.day)
@@ -99,6 +103,10 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         } else if (viewState.yearEditable) {
             date_input_year.requestFocus()
         }
+
+        date_input_day.setBackgroundColor(if (viewState.dayEditable) { backgroundColor } else { whiteColor })
+        date_input_month.setBackgroundColor(if (viewState.monthEditable) { backgroundColor } else { whiteColor })
+        date_input_year.setBackgroundColor(if (viewState.yearEditable) { backgroundColor } else { whiteColor })
     }
 
     private fun showAnswerAlert(message: String) {

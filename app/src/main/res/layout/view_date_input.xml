@@ -18,6 +18,7 @@
             android:inputType="number"
             android:maxLength="2"
             android:selectAllOnFocus="true"
+            android:background="@color/colorAccentLight"
             android:imeOptions="actionNext"
             />
 
@@ -39,6 +40,7 @@
             android:selectAllOnFocus="true"
             android:imeOptions="actionNext"
             android:dropDownAnchor="@id/date_input_month"
+            android:background="@color/colorAccentLight"
             android:completionThreshold="1"
             />
 
@@ -57,6 +59,7 @@
             android:inputType="number"
             android:maxLength="4"
             android:selectAllOnFocus="true"
+            android:background="@color/colorAccentLight"
             android:imeOptions="actionGo"
             />
 

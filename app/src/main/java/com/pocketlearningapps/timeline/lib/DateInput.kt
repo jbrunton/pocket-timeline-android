@@ -8,14 +8,12 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import android.widget.LinearLayout
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.widget.doAfterTextChanged
 import com.pocketlearningapps.timeline.R
 import kotlinx.android.synthetic.main.view_date_input.view.*
 import java.lang.Integer.parseInt
 import java.time.DateTimeException
 import java.time.LocalDate
-import java.time.Month
 
 
 typealias DateInputChanged = (date: LocalDate?) -> Unit
@@ -40,11 +38,6 @@ class DateInput @JvmOverloads constructor(
         val textView =
             findViewById<View>(R.id.date_input_month) as AutoCompleteTextView
         textView.setAdapter(adapter)
-        textView.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                textView.showDropDown()
-            }
-        }
 
         date_input_day.doAfterTextChanged {
             if (it?.length ?: 0 >= 2) {
