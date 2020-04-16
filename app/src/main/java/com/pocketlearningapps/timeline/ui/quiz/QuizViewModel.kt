@@ -3,6 +3,7 @@ package com.pocketlearningapps.timeline.ui.quiz
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pocketlearningapps.timeline.entities.DatePart
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Question
 import com.pocketlearningapps.timeline.entities.Quiz
@@ -16,8 +17,18 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 data class WhatDateViewState(
-    val showError: Boolean
-)
+    val showError: Boolean,
+    val dayEditable: Boolean,
+    val day: String,
+    val monthEditable: Boolean,
+    val month: String,
+    val yearEditable: Boolean,
+    val year: String
+) {
+    companion object {
+        val Empty = WhatDateViewState(false, false, "", false, "", false, "")
+    }
+}
 
 data class WhichEventViewState(
     val options: List<Event>,
@@ -38,13 +49,14 @@ data class QuizViewState(
 
 class QuizViewStateFactory {
     private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+
     fun viewState(question: Question, percentComplete: Int): QuizViewState {
         return when (question) {
             is Question.WhatDateQuestion -> QuizViewState(
                 questionTitle = "When did the following event occur?",
                 questionDetails = question.event.title,
                 showWhatDateContent = true,
-                whatDateContent = WhatDateViewState(showError = false),
+                whatDateContent = whatDateViewState(question),
                 showWhichEventContent = false,
                 whichEventContent = WhichEventViewState(emptyList(), UUID.randomUUID()),
                 submitEnabled = false,
@@ -55,7 +67,7 @@ class QuizViewStateFactory {
                 questionTitle = "Select the event that occurred on this date",
                 questionDetails = question.event.date.format(dateFormatter),
                 showWhatDateContent = false,
-                whatDateContent = WhatDateViewState(showError = false),
+                whatDateContent = WhatDateViewState.Empty,
                 showWhichEventContent = true,
                 whichEventContent = WhichEventViewState(question.options, UUID.randomUUID()),
                 submitEnabled = false,
@@ -65,7 +77,24 @@ class QuizViewStateFactory {
         }
     }
 
+    private fun whatDateViewState(question: Question.WhatDateQuestion): WhatDateViewState {
+        val dayEditable = question.dateComponents.contains(DatePart.DAY)
+        val dayText = if (dayEditable) { "" } else { question.event.date.dayOfMonth.toString() }
+        val monthEditable = question.dateComponents.contains(DatePart.MONTH)
+        val monthText = if (monthEditable) { "" } else { question.event.date.monthValue.toString() }
+        val yearEditable = question.dateComponents.contains(DatePart.YEAR)
+        val yearText = if (yearEditable) { "" } else { question.event.date.year.toString() }
 
+        return WhatDateViewState(
+            showError = false,
+            dayEditable = dayEditable,
+            day = dayText,
+            monthEditable = monthEditable,
+            month = monthText,
+            yearEditable = yearEditable,
+            year = yearText
+        )
+    }
 }
 
 class QuizViewModel(
@@ -78,7 +107,7 @@ class QuizViewModel(
     val hideKeyboard = SingleLiveAction()
     val focusOnSubmit = SingleLiveAction()
     val focusOnDateInput = SingleLiveAction()
-    val clearDateInput = SingleLiveAction()
+    val initializeDateInput = SingleLiveEvent<WhatDateViewState>()
     private lateinit var quiz: Quiz
     private val viewStateFactory = QuizViewStateFactory()
 
@@ -92,8 +121,9 @@ class QuizViewModel(
 
     private fun nextQuestion() {
         question = quiz.nextQuestion()
-        viewState.postValue(viewStateFactory.viewState(question, quiz.percentComplete))
-        clearDateInput.post()
+        val viewState = viewStateFactory.viewState(question, quiz.percentComplete)
+        this.viewState.postValue(viewState)
+        initializeDateInput.postValue(viewState.whatDateContent)
         if (question is Question.WhatDateQuestion) {
             focusOnDateInput.post()
         }

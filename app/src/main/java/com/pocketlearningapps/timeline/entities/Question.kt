@@ -5,13 +5,20 @@ import java.time.format.DateTimeFormatter
 
 val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
 
+enum class DatePart {
+    DAY,
+    MONTH,
+    YEAR
+}
+
 sealed class Question {
     abstract fun validate(answer: Any?): Boolean
     abstract val correctAnswer: String
 
     data class WhatDateQuestion(
         val category: Category,
-        val event: Event
+        val event: Event,
+        val dateComponents: List<DatePart>
     ) : Question() {
         override fun validate(answer: Any?) = answer == event.date
         override val correctAnswer: String = event.date.format(formatter)
@@ -26,4 +33,3 @@ sealed class Question {
         override val correctAnswer: String = event.title
     }
 }
-

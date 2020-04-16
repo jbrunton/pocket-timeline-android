@@ -38,6 +38,8 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="2"
+            android:text="04"
+            android:enabled="false"
             android:selectAllOnFocus="true"
             android:imeOptions="actionNext"
             />

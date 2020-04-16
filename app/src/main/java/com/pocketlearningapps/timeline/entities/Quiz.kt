@@ -32,7 +32,8 @@ class Quiz(
 
         val event = category.events!!.get(Random.nextInt(category.events.size))
         currentQuestion = if (level > 1) {
-            Question.WhatDateQuestion(category, event)
+            val dateComponents = pickDateComponents(level)
+            Question.WhatDateQuestion(category, event, dateComponents)
         } else {
             Question.WhichEventQuestion(category, event, pickEventOptions(category.events, event))
         }
@@ -64,5 +65,26 @@ class Quiz(
             .sortedBy { Random.nextInt() }
             .take(2)
             .plus(correctAnswer)
+    }
+
+    private fun pickDateComponents(level: Int): List<DatePart> {
+        return when (level) {
+            2 -> {
+                when (Random.nextInt(3)) {
+                    0 -> listOf(DatePart.MONTH)
+                    1 -> listOf(DatePart.YEAR)
+                    else -> listOf(DatePart.MONTH, DatePart.YEAR)
+                }
+            }
+            3 -> {
+                when (Random.nextInt(4)) {
+                    0 -> listOf(DatePart.DAY, DatePart.MONTH)
+                    1 -> listOf(DatePart.DAY, DatePart.YEAR)
+                    2 -> listOf(DatePart.MONTH, DatePart.YEAR)
+                    else -> listOf(DatePart.DAY, DatePart.MONTH, DatePart.YEAR)
+                }
+            }
+            else -> throw IllegalArgumentException("Unexpected level: $level")
+        }
     }
 }
