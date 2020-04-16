@@ -4,20 +4,25 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import com.pocketlearningapps.timeline.R
-import kotlinx.android.synthetic.main.fragment_quiz_selector.view.*
 import kotlinx.android.synthetic.main.view_date_input.view.*
 import java.lang.Integer.parseInt
-import java.lang.NumberFormatException
 import java.time.DateTimeException
 import java.time.LocalDate
+import java.time.Month
+
 
 typealias DateInputChanged = (date: LocalDate?) -> Unit
+
+private val MONTHS = arrayOf(
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December")
 
 class DateInput @JvmOverloads constructor(
     context: Context,
@@ -26,6 +31,20 @@ class DateInput @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
     init {
         View.inflate(context, R.layout.view_date_input, this)
+
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            context,
+            android.R.layout.simple_dropdown_item_1line,
+            MONTHS
+        )
+        val textView =
+            findViewById<View>(R.id.date_input_month) as AutoCompleteTextView
+        textView.setAdapter(adapter)
+        textView.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                textView.showDropDown()
+            }
+        }
 
         date_input_day.doAfterTextChanged {
             if (it?.length ?: 0 >= 2) {
@@ -39,7 +58,7 @@ class DateInput @JvmOverloads constructor(
             true
         }
         date_input_month.doAfterTextChanged {
-            if (it?.length ?: 0 >= 2) {
+            if (MONTHS.contains(it?.toString())) {
                 Log.d("DateInput", "date_input_month.doAfterTextChanged")
                 date_input_year.requestFocus()
             }
@@ -55,7 +74,7 @@ class DateInput @JvmOverloads constructor(
             true
         }
 
-        listOf(date_input_day, date_input_month, date_input_year).forEach {
+        listOf<EditText>(date_input_day, date_input_month, date_input_year).forEach {
             it.doAfterTextChanged {
                 onChanged?.invoke(date)
             }
@@ -79,9 +98,10 @@ class DateInput @JvmOverloads constructor(
 
     var month: Int?
         get() {
-            return try {
-                parseInt(date_input_month.text.toString())
-            } catch (e: NumberFormatException) {
+            val monthsText = date_input_month.text.toString()
+            return if (MONTHS.contains(monthsText)) {
+                MONTHS.indexOf(monthsText) + 1
+            } else {
                 null
             }
         }
@@ -97,7 +117,7 @@ class DateInput @JvmOverloads constructor(
                 null
             }
         }
-        set(year: Int?) {
+        set(year) {
             date_input_year.setText(year?.let(Int::toString) ?: "")
         }
 

@@ -5,10 +5,9 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_weight="0.25"
+        android:layout_weight="0.2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginRight="@dimen/margin"
         android:hint="DD">
 
@@ -25,32 +24,30 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_weight="0.25"
+        android:layout_weight="0.5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginRight="@dimen/margin"
         android:hint="MM">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/date_input_month"
             android:layout_width="match_parent"
+            style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="2"
-            android:text="04"
             android:enabled="false"
             android:selectAllOnFocus="true"
             android:imeOptions="actionNext"
+            android:dropDownAnchor="@id/date_input_month"
+            android:completionThreshold="1"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_weight="0.5"
+        android:layout_weight="0.3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:hint="YYYY">
 
         <com.google.android.material.textfield.TextInputEditText
