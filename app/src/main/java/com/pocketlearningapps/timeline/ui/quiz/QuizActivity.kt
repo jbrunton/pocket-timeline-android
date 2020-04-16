@@ -19,7 +19,7 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
     override val container by lazy { (application as HasContainer).container }
     private val viewModel: QuizViewModel by injectViewModel()
     private val keyboardHelper: KeyboardHelper by inject()
-    private val timelineId by lazy { intent.getStringExtra("TIMELINE_ID") }
+    private val categoryId by lazy { intent.getStringExtra("CATEGORY_ID") }
     private val level by lazy { intent.getIntExtra("LEVEL", 0) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +51,7 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         which_event_options.onOptionSelected = viewModel::onOptionSelected
 
         if (savedInstanceState == null) {
-            viewModel.initialize(timelineId, level)
+            viewModel.initialize(categoryId, level)
         }
     }
 

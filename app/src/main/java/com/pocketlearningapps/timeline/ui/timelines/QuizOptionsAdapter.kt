@@ -1,37 +1,53 @@
 package com.pocketlearningapps.timeline.ui.timelines
 
-import android.graphics.Color
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import com.pocketlearningapps.timeline.R
+import com.pocketlearningapps.timeline.entities.Category
 import com.pocketlearningapps.timeline.entities.Medal
 import com.pocketlearningapps.timeline.entities.Timeline
 
-typealias OnQuizOptionClickHandler = (timeline: Timeline, level: Int) -> Unit
+typealias OnQuizOptionClickHandler = (category: Category, level: Int) -> Unit
 
 class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
-        const val TYPE_HEADER = 0
-        const val TYPE_ITEM = 1
+        internal const val TYPE_HEADER = 0
+        internal const val TYPE_ITEM = 1
     }
 
-    private val data = mutableListOf<Timeline>()
+    internal sealed class QuizOptionItem {
+        abstract val adapterType: Int
+
+        data class Header(val timeline: Timeline) : QuizOptionItem() {
+            override val adapterType = TYPE_HEADER
+        }
+
+        data class Item(val category: Category) : QuizOptionItem() {
+            override val adapterType = TYPE_ITEM
+        }
+    }
+
+
+
+    private val data = mutableListOf<QuizOptionItem>()
     private val timelineViewHolderFactory = TimelineViewHolderFactory()
 
     var onQuizOptionClicked: OnQuizOptionClickHandler? = null
 
     fun setData(items: Collection<Timeline>) {
         this.data.clear()
-        this.data.addAll(items)
+        items.forEach { timeline ->
+            this.data.add(QuizOptionItem.Header(timeline))
+            val categories = timeline.categories
+            if (categories != null) {
+                this.data.addAll(categories.map { QuizOptionItem.Item(it) })
+            }
+        }
         notifyDataSetChanged()
     }
 
@@ -44,14 +60,12 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         } else {
             val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_quiz_level, parent, false)
+                .inflate(R.layout.item_quiz_category, parent, false)
 
             view.setOnClickListener {
                 val position = view.tag as Int
-                val timelineIndex = position / 4
-                val timeline = data.get(timelineIndex)
-                val level = position % 4
-                onQuizOptionClicked?.invoke(timeline, level)
+                val item = data.get(position) as QuizOptionItem.Item
+                onQuizOptionClicked?.invoke(item.category, item.category.level)
             }
 
             return ItemViewHolder(view)
@@ -59,63 +73,67 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return data.size * 4 // 3 levels + 1 header for each item
+        return data.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position % 4 == 0) {
-            TYPE_HEADER
-        } else {
-            TYPE_ITEM
-        }
+        return data.get(position).adapterType
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val timelineIndex = position / 4
-        val timeline = data.get(timelineIndex)
-
         if (holder is TimelineViewHolder) {
-            timelineViewHolderFactory.bindHolder(holder, timeline, data, timelineIndex)
+            val header = data.get(position) as QuizOptionItem.Header
+            val timeline = header.timeline
+            timelineViewHolderFactory.bindHolder(holder, timeline, position)
         } else if (holder is ItemViewHolder) {
+            val item = data.get(position) as QuizOptionItem.Item
+            val category = item.category
             holder.itemView.tag = position
-            val level = position % 4
-            holder.levelName.text = "Level ${level}"
+            holder.categoryName.text = category.name
 
             val context = holder.itemView.context
 
-            val locked = level > timeline.level + 1
-            holder.icon.visibility = View.VISIBLE
-            if (locked) {
-                holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock_black_24dp))
-                holder.icon.backgroundTintList = ContextCompat.getColorStateList(context, android.R.color.white)
-                holder.icon.imageTintList = ContextCompat.getColorStateList(context, android.R.color.darker_gray)
-                holder.gpa.isVisible = false
-            } else {
-                holder.gpa.isVisible = true
-                val rating = timeline.levelRating(level)
-                val medal = Medal.forGpa(rating.gpa)
-                if (medal != null) {
-                    val medalColor = ContextCompat.getColor(context, medal.color)
-                    val medalBackround = holder.icon.background as GradientDrawable
-                    medalBackround.colors = intArrayOf(
-                        medalColor,
-                        ColorUtils.blendARGB(medalColor, Color.WHITE, 0.5f),
-                        medalColor
-                    )
-
-                    holder.icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
-                    holder.icon.background = medalBackround
+            listOf(1, 2, 3).forEach { level ->
+                val icon = holder.iconForLevel(level)
+                val rating = category.levelRating(level)
+                val greyColorList = ContextCompat.getColorStateList(context, R.color.colorGreyLight)
+                if (rating.unlocked) {
+                    val medal = Medal.forGpa(rating.gpa)
+                    if (medal != null) {
+                        val medalColorList = ContextCompat.getColorStateList(context, medal.color)
+                        val medalBackround = ContextCompat.getDrawable(context, medal.background)
+                        icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_medal_24dp))
+                        icon.background = medalBackround
+                        icon.imageTintList = medalColorList
+                        icon.backgroundTintList = null
+                    } else {
+                        val accentColorList = ContextCompat.getColorStateList(context, R.color.colorAccent)
+                        icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_black_24dp))
+                        icon.background = ContextCompat.getDrawable(context, R.drawable.medal_border)
+                        icon.imageTintList = accentColorList
+                        icon.backgroundTintList = greyColorList
+                    }
                 } else {
-                    holder.icon.visibility = View.INVISIBLE
+                    icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_lock_black_24dp))
+                    icon.background = ContextCompat.getDrawable(context, R.drawable.medal_border)
+                    icon.imageTintList = greyColorList
+                    icon.backgroundTintList = greyColorList
                 }
-                holder.gpa.text = rating.gpaString
             }
         }
     }
 
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val levelName: TextView = itemView.findViewById(R.id.level_name)
-        val icon: ImageView = itemView.findViewById(R.id.icon)
-        val gpa: Chip = itemView.findViewById(R.id.gpa)
+        val categoryName: TextView = itemView.findViewById(R.id.category_name)
+        val iconLevel1: ImageView = itemView.findViewById(R.id.icon_level_1)
+        val iconLevel2: ImageView = itemView.findViewById(R.id.icon_level_2)
+        val iconLevel3: ImageView = itemView.findViewById(R.id.icon_level_3)
+
+        fun iconForLevel(level: Int) = when (level) {
+            1 -> iconLevel1
+            2 -> iconLevel2
+            3 -> iconLevel3
+            else -> throw IllegalArgumentException("Unexpected level: $level")
+        }
     }
 }

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6200EE</color>
-    <color name="colorGreyLight">#F0F0F0</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <color name="colorGrey">#909090</color>
+    <color name="colorGreyLight">#D0D0D0</color>
+
     <color name="colorBronze">#CD7F32</color>
+    <color name="colorBronzeLight">#F2DBB8</color>
     <color name="colorSilver">#B0B0B0</color>
+    <color name="colorSilverLight">#EBE7D7</color>
     <color name="colorGold">#D4AF37</color>
+    <color name="colorGoldLight">#E9E0C2</color>
 </resources>

@@ -7,7 +7,7 @@ import kotlin.random.Random
 private const val QUIZ_LENGTH = 3
 
 class Quiz(
-    private val timeline: Timeline,
+    private val category: Category,
     private val level: Int
 ) {
     var totalQuestions = 0
@@ -30,11 +30,11 @@ class Quiz(
             throw IllegalStateException("Quiz is complete")
         }
 
-        val event = timeline.events!!.get(Random.nextInt(timeline.events.size))
+        val event = category.events!!.get(Random.nextInt(category.events.size))
         currentQuestion = if (level > 1) {
-            Question.WhatDateQuestion(timeline, event)
+            Question.WhatDateQuestion(category, event)
         } else {
-            Question.WhichEventQuestion(timeline, event, pickEventOptions(timeline.events, event))
+            Question.WhichEventQuestion(category, event, pickEventOptions(category.events, event))
         }
 
         return currentQuestion
@@ -47,7 +47,10 @@ class Quiz(
         }
         totalQuestions += 1
         if (isComplete) {
-            submitScore(Score(timeline.id, normalizedScore))
+            submitScore(Score(
+                categoryId = category.id,
+                level = level,
+                normalizedScore = normalizedScore))
         }
         else {
             nextQuestion()

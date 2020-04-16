@@ -1,14 +1,15 @@
 package com.pocketlearningapps.timeline.entities
 
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import com.google.gson.annotations.SerializedName
 import com.pocketlearningapps.timeline.R
 import kotlin.math.max
 
-enum class Medal(@ColorRes val color: Int) {
-    BRONZE(R.color.colorBronze),
-    SILVER(R.color.colorSilver),
-    GOLD(R.color.colorGold);
+enum class Medal(@ColorRes val color: Int, @DrawableRes val background: Int) {
+    BRONZE(R.color.colorBronze, R.drawable.medal_background_bronze),
+    SILVER(R.color.colorSilver, R.drawable.medal_background_silver),
+    GOLD(R.color.colorGold, R.drawable.medal_background_gold);
 
     companion object {
         fun forGpa(gpa: Float?) = when {
