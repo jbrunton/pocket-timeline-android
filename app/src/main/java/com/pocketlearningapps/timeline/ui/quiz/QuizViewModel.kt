@@ -139,15 +139,19 @@ class QuizViewModel(
             is Question.WhatDateQuestion -> whatDateAnswer
             is Question.WhichEventQuestion -> whichEventAnswer
         }
-        viewModelScope.launch {
-            if (quiz.submitAnswer(answer, this@QuizViewModel::submitScore)) {
-                //showAnswerAlert.postValue("Correct!")
-                showContinueDialog.postValue(ContinueDialogState("Correct!", R.style.SubmitWidget_Correct_Theme))
-            } else {
-                //showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
-                showContinueDialog.postValue(ContinueDialogState("Incorrect. The answer was ${question.correctAnswer}.", R.style.SubmitWidget_Incorrect_Theme))
-            }
+        val continueDialogState = if (quiz.submitAnswer(answer, this::submitScore)) {
+            ContinueDialogState(
+                title = "Correct!",
+                label = null,
+                theme = R.style.SubmitWidget_Correct_Theme)
+        } else {
+            ContinueDialogState(
+                title = "Incorrect. The answer was:",
+                label = question.correctAnswer,
+                theme = R.style.SubmitWidget_Incorrect_Theme
+            )
         }
+        showContinueDialog.postValue(continueDialogState)
     }
 
     fun onDateChanged(date: LocalDate?) {

@@ -25,7 +25,10 @@
         <item name="android:backgroundTint">@color/submit_button_correct_color</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>
-    <style name="SubmitWidget.Correct.Label" parent="@style/TextAppearance.MaterialComponents.Headline6">
+    <style name="SubmitWidget.Correct.Title" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorGreen</item>
+    </style>
+    <style name="SubmitWidget.Correct.Label" parent="@style/TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/colorGreen</item>
     </style>
     <style name="SubmitWidget.Correct.Background">
@@ -37,7 +40,10 @@
         <item name="android:backgroundTint">@color/submit_button_incorrect_color</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>
-    <style name="SubmitWidget.Incorrect.Label" parent="@style/TextAppearance.MaterialComponents.Headline6">
+    <style name="SubmitWidget.Incorrect.Title" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">@color/colorRed</item>
+    </style>
+    <style name="SubmitWidget.Incorrect.Label" parent="@style/TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">@color/colorRed</item>
     </style>
     <style name="SubmitWidget.Incorrect.Background">

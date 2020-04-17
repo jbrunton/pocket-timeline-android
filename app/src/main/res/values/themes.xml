@@ -1,11 +1,13 @@
 <resources>
     <style name="SubmitWidget.Correct.Theme">
         <item name="submitWidgetBackground">@style/SubmitWidget.Correct.Background</item>
+        <item name="submitWidgetTitle">@style/SubmitWidget.Correct.Title</item>
         <item name="submitWidgetLabel">@style/SubmitWidget.Correct.Label</item>
         <item name="submitWidgetButton">@style/SubmitWidget.Correct.Button</item>
     </style>
     <style name="SubmitWidget.Incorrect.Theme">
         <item name="submitWidgetBackground">@style/SubmitWidget.Incorrect.Background</item>
+        <item name="submitWidgetTitle">@style/SubmitWidget.Incorrect.Title</item>
         <item name="submitWidgetLabel">@style/SubmitWidget.Incorrect.Label</item>
         <item name="submitWidgetButton">@style/SubmitWidget.Incorrect.Button</item>
     </style>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:theme="@style/SubmitWidget.Correct.Theme"
+    tools:theme="@style/SubmitWidget.Incorrect.Theme"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -9,12 +9,20 @@
     style="?submitWidgetBackground">
 
     <TextView
+        android:id="@+id/continue_title"
+        style="?submitWidgetTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Incorrect" />
+
+    <TextView
         android:id="@+id/continue_label"
         style="?submitWidgetLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Correct!" />
+        android:text="The answer was 'Pearl Harbor'" />
 
     <Button
         style="?submitWidgetButton"
