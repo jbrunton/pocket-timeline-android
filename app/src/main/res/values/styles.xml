@@ -32,8 +32,5 @@
     <style name="ContinueDialog.Label" parent="@style/TextAppearance.AppCompat.Body1">
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
-    <style name="ContinueDialog.Button">
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
 
 </resources>
