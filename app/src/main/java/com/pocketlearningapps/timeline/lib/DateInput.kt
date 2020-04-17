@@ -99,7 +99,7 @@ class DateInput @JvmOverloads constructor(
             }
         }
         set(month) {
-            date_input_month.setText(month?.let(Int::toString) ?: "")
+            date_input_month.setText(month?.let { MONTHS.get(it - 1) } ?: "")
         }
 
     var year: Int?

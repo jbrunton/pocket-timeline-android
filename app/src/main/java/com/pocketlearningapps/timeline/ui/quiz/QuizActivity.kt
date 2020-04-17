@@ -87,11 +87,11 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
     private fun updateDateInput(viewState: WhatDateViewState) {
         date_error.isVisible = viewState.showError
         date_input_day.isEnabled = viewState.dayEditable
-        date_input_day.setText(viewState.day)
+        date_input.day = viewState.day
         date_input_month.isEnabled = viewState.monthEditable
-        date_input_month.setText(viewState.month)
+        date_input.month = viewState.month
         date_input_year.isEnabled = viewState.yearEditable
-        date_input_year.setText(viewState.year)
+        date_input.year = viewState.year
 
         if (viewState.dayEditable) {
             date_input_day.requestFocus()

@@ -19,14 +19,14 @@ import java.util.*
 data class WhatDateViewState(
     val showError: Boolean,
     val dayEditable: Boolean,
-    val day: String,
+    val day: Int?,
     val monthEditable: Boolean,
-    val month: String,
+    val month: Int?,
     val yearEditable: Boolean,
-    val year: String
+    val year: Int?
 ) {
     companion object {
-        val Empty = WhatDateViewState(false, false, "", false, "", false, "")
+        val Empty = WhatDateViewState(false, false, null, false, null, false, null)
     }
 }
 
@@ -79,11 +79,11 @@ class QuizViewStateFactory {
 
     private fun whatDateViewState(question: Question.WhatDateQuestion): WhatDateViewState {
         val dayEditable = question.dateComponents.contains(DatePart.DAY)
-        val dayText = if (dayEditable) { "" } else { question.event.date.dayOfMonth.toString() }
+        val dayText = if (dayEditable) { null } else { question.event.date.dayOfMonth }
         val monthEditable = question.dateComponents.contains(DatePart.MONTH)
-        val monthText = if (monthEditable) { "" } else { question.event.date.monthValue.toString() }
+        val monthText = if (monthEditable) { null } else { question.event.date.monthValue }
         val yearEditable = question.dateComponents.contains(DatePart.YEAR)
-        val yearText = if (yearEditable) { "" } else { question.event.date.year.toString() }
+        val yearText = if (yearEditable) { null } else { question.event.date.year }
 
         return WhatDateViewState(
             showError = false,
