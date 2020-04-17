@@ -1,18 +1,25 @@
 package com.pocketlearningapps.timeline.ui.quiz
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.annotation.StyleRes
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.pocketlearningapps.timeline.R
+import com.pocketlearningapps.timeline.lib.requireInt
+import com.pocketlearningapps.timeline.lib.requireString
 import kotlinx.android.synthetic.main.dialog_continue.*
+import java.io.Serializable
+
+private const val ARG_THEME_ID = "ARG_THEME_ID"
+private const val ARG_LABEL = "ARG_LABEL"
+
+data class ContinueDialogState(
+    val label: String,
+    @StyleRes val theme: Int
+) : Serializable
 
 class ContinueDialog : BottomSheetDialogFragment() {
     init {
@@ -28,14 +35,14 @@ class ContinueDialog : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val theme = arguments?.getInt("THEME") ?: throw java.lang.IllegalStateException("Missing theme")
-        val contextThemeWrapper = ContextThemeWrapper(activity, theme)
-        return activity?.layoutInflater?.cloneInContext(contextThemeWrapper)?.inflate(R.layout.dialog_continue, container, false)
+        val contextThemeWrapper = ContextThemeWrapper(activity, arguments.requireInt(ARG_THEME_ID))
+        return inflater.cloneInContext(contextThemeWrapper)
+            .inflate(R.layout.dialog_continue, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        continue_label.text = arguments?.getString("LABEL")
+        continue_label.text = arguments.requireString(ARG_LABEL)
         continue_button.setOnClickListener {
             dismiss()
             (activity as Listener).onContinuePressed()
@@ -43,11 +50,11 @@ class ContinueDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun build(state: ContinueWidgetState): ContinueDialog {
+        fun build(state: ContinueDialogState): ContinueDialog {
             return ContinueDialog().apply {
                 arguments = Bundle().apply {
-                    putSerializable("THEME", state.theme)
-                    putSerializable("LABEL", state.label)
+                    putSerializable(ARG_THEME_ID, state.theme)
+                    putSerializable(ARG_LABEL, state.label)
                 }
             }
         }

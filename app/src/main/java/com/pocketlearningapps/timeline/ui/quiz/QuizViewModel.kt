@@ -50,11 +50,6 @@ data class QuizViewState(
     val percentComplete: Int
 )
 
-data class ContinueWidgetState(
-    val label: String,
-    @StyleRes val theme: Int
-) : Serializable
-
 class QuizViewStateFactory {
     private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
 
@@ -116,7 +111,7 @@ class QuizViewModel(
     val focusOnSubmit = SingleLiveAction()
     val focusOnDateInput = SingleLiveAction()
     val initializeDateInput = SingleLiveEvent<WhatDateViewState>()
-    val showContinueDialog = SingleLiveEvent<ContinueWidgetState>()
+    val showContinueDialog = SingleLiveEvent<ContinueDialogState>()
     private lateinit var quiz: Quiz
     private val viewStateFactory = QuizViewStateFactory()
 
@@ -147,10 +142,10 @@ class QuizViewModel(
         viewModelScope.launch {
             if (quiz.submitAnswer(answer, this@QuizViewModel::submitScore)) {
                 //showAnswerAlert.postValue("Correct!")
-                showContinueDialog.postValue(ContinueWidgetState("Correct!", R.style.SubmitWidget_Correct_Theme))
+                showContinueDialog.postValue(ContinueDialogState("Correct!", R.style.SubmitWidget_Correct_Theme))
             } else {
                 //showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
-                showContinueDialog.postValue(ContinueWidgetState("Incorrect. The answer was ${question.correctAnswer}.", R.style.SubmitWidget_Incorrect_Theme))
+                showContinueDialog.postValue(ContinueDialogState("Incorrect. The answer was ${question.correctAnswer}.", R.style.SubmitWidget_Incorrect_Theme))
             }
         }
     }
