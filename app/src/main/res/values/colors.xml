@@ -19,4 +19,6 @@
 
     <color name="colorGreen">#8BC34A</color>
     <color name="colorGreenLight">#338BC34A</color>
+    <color name="colorRed">#F44336</color>
+    <color name="colorRedLight">#33F44336</color>
 </resources>

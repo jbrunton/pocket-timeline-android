@@ -111,7 +111,7 @@
         <Button
             android:id="@+id/submit"
             android:text="Submit"
-            style="@style/GreenButton"
+            style="@style/SubmitWidget.Correct.Button"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -119,7 +119,7 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:theme="@style/CorrectTheme"
+        android:theme="@style/SubmitWidget.Incorrect.Theme"
         style="?submitWidgetBackground"
         android:id="@+id/continue_content"
         android:layout_width="match_parent"
