@@ -29,12 +29,12 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
 
-        viewModel.viewState.observe(this, Observer { updateViewState(it) })
+        viewModel.viewState.distinctUntilChanged().observe(this, Observer { updateViewState(it) })
         viewModel.showAnswerAlert.observe(this, Observer { showAnswerAlert(it) })
         viewModel.showQuizCompleteAlert.observe(this, Observer { showQuizCompletedAlert(it) })
         viewModel.hideKeyboard.observe(this, Observer { keyboardHelper.hideKeyboard(date_input) })
         viewModel.focusOnSubmit.observe(this, Observer { submit.requestFocus() })
-        viewModel.clearDateInput.observe(this, Observer { date_input.date = null })
+        viewModel.initializeDateInput.observe(this, Observer { updateDateInput(it) })
         viewModel.focusOnDateInput.observe(this, Observer {
             keyboardHelper.showKeyboard(date_input_day)
             date_input_day.requestFocus()
@@ -73,7 +73,6 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         category_description.text = viewState.categoryDescription
 
         what_date_content.isVisible = viewState.showWhatDateContent
-        date_error.isVisible = viewState.whatDateContent.showError
 
         which_event_options.isVisible = viewState.showWhichEventContent
 
@@ -82,6 +81,24 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
 
     private fun updateWhichEventViewState(viewState: WhichEventViewState) {
         which_event_options.updateView(viewState.options)
+    }
+
+    private fun updateDateInput(viewState: WhatDateViewState) {
+        date_error.isVisible = viewState.showError
+        date_input_day.isEnabled = viewState.dayEditable
+        date_input_day.setText(viewState.day)
+        date_input_month.isEnabled = viewState.monthEditable
+        date_input_month.setText(viewState.month)
+        date_input_year.isEnabled = viewState.yearEditable
+        date_input_year.setText(viewState.year)
+
+        if (viewState.dayEditable) {
+            date_input_day.requestFocus()
+        } else if (viewState.monthEditable) {
+            date_input_month.requestFocus()
+        } else if (viewState.yearEditable) {
+            date_input_year.requestFocus()
+        }
     }
 
     private fun showAnswerAlert(message: String) {
