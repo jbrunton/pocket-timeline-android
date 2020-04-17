@@ -119,26 +119,25 @@
     </RelativeLayout>
 
     <LinearLayout
+        style="@style/SubmitWidget.Background"
         android:id="@+id/continue_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:padding="@dimen/margin"
-        android:background="@color/colorGreenLight">
+        android:padding="@dimen/margin">
 
         <TextView
-            style="@style/TextAppearance.MaterialComponents.Headline6"
+            style="@style/SubmitWidget.Label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorGreen"
             android:layout_marginBottom="8dp"
             android:text="Correct!" />
 
         <Button
+            style="@style/SubmitWidget.Button"
             android:id="@+id/continue_button"
             android:text="Continue"
-            style="@style/GreenButton"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

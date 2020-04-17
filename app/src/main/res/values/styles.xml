@@ -23,4 +23,25 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="SubmitButton"></style>
+    <style name="SubmitLabel"></style>
+    <style name="SubmitBackground"></style>
+
+    <style name="SubmitWidget">
+    </style>
+
+    <style name="SubmitWidget.Button">
+        <item name="android:backgroundTint">@color/submit_button_bg_color</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="SubmitWidget.Label" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="backgroundColor">@color/colorGreenLight</item>
+        <item name="android:textColor">@color/colorGreen</item>
+    </style>
+
+    <style name="SubmitWidget.Background">
+        <item name="android:background">@color/colorGreenLight</item>
+    </style>
+
 </resources>

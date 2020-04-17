@@ -1,0 +1,7 @@
+<resources>
+    <style name="CorrectTheme">
+        <item name="android:backgroundTint"></item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="colorPrimarySurface">@color/colorGreenLight</item>
+    </style>
+</resources>
