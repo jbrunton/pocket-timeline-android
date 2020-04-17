@@ -118,29 +118,6 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:theme="@style/SubmitWidget.Incorrect.Theme"
-        style="?submitWidgetBackground"
-        android:id="@+id/continue_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/margin">
 
-        <TextView
-            style="?submitWidgetLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Correct!" />
-
-        <Button
-            style="?submitWidgetButton"
-            android:id="@+id/continue_button"
-            android:text="Continue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 
 </LinearLayout>

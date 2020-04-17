@@ -45,7 +45,8 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
             .observe(this, Observer { updateWhichEventViewState(it) })
 
         submit.setOnClickListener {
-            viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
+            ContinueDialog().show(supportFragmentManager, "CONTINUE")
+            //viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
         }
         date_input.onChanged = viewModel::onDateChanged
         date_input.onDoneAction = { viewModel.onDateEntered(date_input.date) }
