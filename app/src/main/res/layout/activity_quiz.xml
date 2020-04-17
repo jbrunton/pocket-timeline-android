@@ -111,7 +111,7 @@
         <Button
             android:id="@+id/submit"
             android:text="Submit"
-            android:theme="@style/GreenButton"
+            android:theme="@style/AppTheme.Green"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
