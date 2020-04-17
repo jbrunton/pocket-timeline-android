@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="submitWidgetBackground" format="reference" />
+    <attr name="submitWidgetLabel" format="reference" />
+    <attr name="submitWidgetButton" format="reference" />
+</resources>
