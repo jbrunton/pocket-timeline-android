@@ -13,16 +13,11 @@ android {
         versionCode 1
         versionName "1.0"
 
-        /**
-         * This can be configured with a file at ~/.gradle/init.d/localip.gradle with the following:
-         *
-         *  allprojects {
-         *      ext {
-         *          local_ip = '<YOUR IP>'
-         *      }
-         *  }
-         */
-        buildConfigField("String", "SERVER_DOMAIN", "\"http://${local_ip}:3000\"")
+        if (System.getenv("LOCAL_IP")) {
+            buildConfigField("String", "SERVER_DOMAIN", "\"http://${System.env.LOCAL_IP}:3000\"")
+        } else {
+            throw new IllegalStateException("LOCAL_IP environment variable required")
+        }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
