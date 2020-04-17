@@ -1,8 +1,10 @@
 package com.pocketlearningapps.timeline.ui.quiz
 
+import androidx.annotation.StyleRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.DatePart
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Question
@@ -12,6 +14,7 @@ import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.Score
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
+import java.io.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -46,6 +49,11 @@ data class QuizViewState(
     val submitEnabled: Boolean,
     val percentComplete: Int
 )
+
+data class ContinueWidgetState(
+    val label: String,
+    @StyleRes val theme: Int
+) : Serializable
 
 class QuizViewStateFactory {
     private val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
@@ -108,6 +116,7 @@ class QuizViewModel(
     val focusOnSubmit = SingleLiveAction()
     val focusOnDateInput = SingleLiveAction()
     val initializeDateInput = SingleLiveEvent<WhatDateViewState>()
+    val showContinueDialog = SingleLiveEvent<ContinueWidgetState>()
     private lateinit var quiz: Quiz
     private val viewStateFactory = QuizViewStateFactory()
 
@@ -137,9 +146,11 @@ class QuizViewModel(
         }
         viewModelScope.launch {
             if (quiz.submitAnswer(answer, this@QuizViewModel::submitScore)) {
-                showAnswerAlert.postValue("Correct!")
+                //showAnswerAlert.postValue("Correct!")
+                showContinueDialog.postValue(ContinueWidgetState("Correct!", R.style.SubmitWidget_Correct_Theme))
             } else {
-                showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
+                //showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
+                showContinueDialog.postValue(ContinueWidgetState("Incorrect. The answer was ${question.correctAnswer}.", R.style.SubmitWidget_Incorrect_Theme))
             }
         }
     }

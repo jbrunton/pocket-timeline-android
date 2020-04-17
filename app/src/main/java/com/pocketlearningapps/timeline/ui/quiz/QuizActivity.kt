@@ -16,12 +16,16 @@ import com.snakydesign.livedataextensions.map
 import kotlinx.android.synthetic.main.activity_quiz.*
 import kotlinx.android.synthetic.main.view_date_input.*
 
-class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
+class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer, ContinueDialog.Listener {
     override val container by lazy { (application as HasContainer).container }
     private val viewModel: QuizViewModel by injectViewModel()
     private val keyboardHelper: KeyboardHelper by inject()
     private val categoryId by lazy { intent.getStringExtra("CATEGORY_ID") }
     private val level by lazy { intent.getIntExtra("LEVEL", 0) }
+
+    override fun onContinuePressed() {
+        viewModel.onAnswerDialogDismissed()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +47,13 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         viewModel.viewState.map { it.whichEventContent }
             .distinctUntilChanged()
             .observe(this, Observer { updateWhichEventViewState(it) })
+        viewModel.showContinueDialog.observe(this, Observer {
+            ContinueDialog.build(it).show(supportFragmentManager, "CONTINUE")
+        })
 
         submit.setOnClickListener {
-            ContinueDialog().show(supportFragmentManager, "CONTINUE")
-            //viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
+            //ContinueDialog().show(supportFragmentManager, "CONTINUE")
+            viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
         }
         date_input.onChanged = viewModel::onDateChanged
         date_input.onDoneAction = { viewModel.onDateEntered(date_input.date) }
