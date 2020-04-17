@@ -10,16 +10,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin"
-        android:hint="DD">
+        android:hint="Day">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/date_input_day"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="2"
+            android:text="12"
             android:selectAllOnFocus="true"
-            android:background="@drawable/edit_text"
             android:imeOptions="actionNext"
             />
 
@@ -30,17 +31,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/margin"
-        android:hint="MM">
+        android:hint="Month">
 
         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/date_input_month"
             android:layout_width="match_parent"
-            style="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox"
+            style="@style/AutocompleteTextView"
             android:layout_height="wrap_content"
             android:selectAllOnFocus="true"
             android:imeOptions="actionNext"
             android:dropDownAnchor="@id/date_input_month"
-            android:background="@drawable/edit_text"
             android:completionThreshold="1"
             />
 
@@ -50,16 +50,16 @@
         android:layout_weight="0.3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="YYYY">
+        android:hint="Year">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/date_input_year"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="4"
             android:selectAllOnFocus="true"
-            android:background="@color/colorAccentLight"
             android:imeOptions="actionGo"
             />
 
