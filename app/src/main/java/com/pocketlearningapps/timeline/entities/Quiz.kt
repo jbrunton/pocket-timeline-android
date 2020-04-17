@@ -30,13 +30,7 @@ class Quiz(
             throw IllegalStateException("Quiz is complete")
         }
 
-        val event = category.events!!.get(Random.nextInt(category.events.size))
-        currentQuestion = if (level > 1) {
-            val dateComponents = pickDateComponents(level)
-            Question.WhatDateQuestion(category, event, dateComponents)
-        } else {
-            Question.WhichEventQuestion(category, event, pickEventOptions(category.events, event))
-        }
+        currentQuestion = generateQuestion()
 
         return currentQuestion
     }
@@ -57,6 +51,22 @@ class Quiz(
             nextQuestion()
         }
         return correct
+    }
+
+    private fun generateQuestion(): Question {
+        val event = category.events!!.get(Random.nextInt(category.events.size))
+        return if (level == 1) {
+            Question.WhichEventQuestion(category, event, pickEventOptions(category.events, event))
+        } else if (level == 2) {
+            if (Random.nextInt(4) == 0) {
+                Question.WhichEventQuestion(category, event, pickEventOptions(category.events, event))
+            } else {
+                Question.WhatDateQuestion(category, event, pickDateComponents(level))
+            }
+        } else {
+            val dateComponents = pickDateComponents(level)
+            Question.WhatDateQuestion(category, event, dateComponents)
+        }
     }
 
     private fun pickEventOptions(events: List<Event>, correctAnswer: Event): List<Event> {
