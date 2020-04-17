@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AutocompleteTextView" parent="@style/Widget.MaterialComponents.AutoCompleteTextView.FilledBox">
+        <item name="android:textColor">@drawable/edit_text_text_color</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+    </style>
+
+    <style name="EditText">
+        <item name="android:textColor">@drawable/edit_text_text_color</item>
+        <item name="android:background">@drawable/edit_text_background</item>
+    </style>
+
 </resources>
