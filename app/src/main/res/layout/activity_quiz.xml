@@ -111,7 +111,7 @@
         <Button
             android:id="@+id/submit"
             android:text="Submit"
-            style="@style/SubmitButtonStyle"
+            style="@style/GreenButton"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -132,14 +132,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/colorGreen"
+            android:layout_marginBottom="8dp"
             android:text="Correct!" />
 
         <Button
             android:id="@+id/continue_button"
             android:text="Continue"
+            style="@style/GreenButton"
             android:layout_alignParentBottom="true"
-            android:backgroundTint="@color/colorGreen"
-            android:textColor="@color/colorWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

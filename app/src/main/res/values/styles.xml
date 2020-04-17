@@ -18,7 +18,7 @@
         <item name="android:background">@drawable/edit_text_background</item>
     </style>
 
-    <style name="SubmitButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="GreenButton" parent="Widget.MaterialComponents.Button">
         <item name="android:backgroundTint">@color/submit_button_bg_color</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>
