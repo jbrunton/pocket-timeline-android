@@ -105,7 +105,6 @@ class QuizViewModel(
 ) : ViewModel() {
     private lateinit var question: Question
     val viewState = MutableLiveData<QuizViewState>()
-    val showAnswerAlert = SingleLiveEvent<String>()
     val showQuizCompleteAlert = SingleLiveEvent<String>()
     val hideKeyboard = SingleLiveAction()
     val focusOnSubmit = SingleLiveAction()
@@ -197,7 +196,7 @@ class QuizViewModel(
         }
     }
 
-    fun onAnswerDialogDismissed() {
+    fun onContinuePressed() {
         if (quiz.isComplete) {
             showQuizCompleteAlert.postValue("Quiz complete. You scored ${quiz.percentageScore}%")
         } else {

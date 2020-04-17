@@ -24,7 +24,7 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer, Co
     private val level by lazy { intent.getIntExtra("LEVEL", 0) }
 
     override fun onContinuePressed() {
-        viewModel.onAnswerDialogDismissed()
+        viewModel.onContinuePressed()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,6 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer, Co
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
 
         viewModel.viewState.distinctUntilChanged().observe(this, Observer { updateViewState(it) })
-        viewModel.showAnswerAlert.observe(this, Observer { showAnswerAlert(it) })
         viewModel.showQuizCompleteAlert.observe(this, Observer { showQuizCompletedAlert(it) })
         viewModel.hideKeyboard.observe(this, Observer { keyboardHelper.hideKeyboard(date_input) })
         viewModel.focusOnSubmit.observe(this, Observer { submit.requestFocus() })
@@ -52,7 +51,6 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer, Co
         })
 
         submit.setOnClickListener {
-            //ContinueDialog().show(supportFragmentManager, "CONTINUE")
             viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
         }
         date_input.onChanged = viewModel::onDateChanged
@@ -108,13 +106,6 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer, Co
         } else if (viewState.yearEditable) {
             date_input_year.requestFocus()
         }
-    }
-
-    private fun showAnswerAlert(message: String) {
-        MaterialAlertDialogBuilder(this)
-            .setMessage(message)
-            .setPositiveButton("OK", { _, _ -> viewModel.onAnswerDialogDismissed() })
-            .show()
     }
 
     private fun showQuizCompletedAlert(message: String) {
