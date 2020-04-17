@@ -40,7 +40,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical"
         android:gravity="center_horizontal"
         android:layout_margin="@dimen/margin">
@@ -110,11 +111,38 @@
         <Button
             android:id="@+id/submit"
             android:text="Submit"
+            style="@style/SubmitButtonStyle"
             android:layout_alignParentBottom="true"
-            android:enabled="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/continue_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:padding="@dimen/margin"
+        android:background="@color/colorGreenLight">
+
+        <TextView
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorGreen"
+            android:text="Correct!" />
+
+        <Button
+            android:id="@+id/continue_button"
+            android:text="Continue"
+            android:layout_alignParentBottom="true"
+            android:backgroundTint="@color/colorGreen"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
 </LinearLayout>
