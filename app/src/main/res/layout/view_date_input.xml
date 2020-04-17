@@ -1,45 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:layout_weight="0.25"
+        android:layout_weight="0.2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_marginRight="@dimen/margin"
-        android:hint="DD">
+        android:hint="Day">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/date_input_day"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
             android:maxLength="2"
-            android:selectAllOnFocus="true"
-            android:imeOptions="actionNext"
-            />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_weight="0.25"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_marginRight="@dimen/margin"
-        android:hint="MM">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/date_input_month"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="number"
-            android:maxLength="2"
-            android:text="04"
-            android:enabled="false"
+            android:text="12"
             android:selectAllOnFocus="true"
             android:imeOptions="actionNext"
             />
@@ -50,11 +30,31 @@
         android:layout_weight="0.5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="YYYY">
+        android:layout_marginRight="@dimen/margin"
+        android:hint="Month">
+
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/date_input_month"
+            android:layout_width="match_parent"
+            style="@style/AutocompleteTextView"
+            android:layout_height="wrap_content"
+            android:selectAllOnFocus="true"
+            android:imeOptions="actionNext"
+            android:dropDownAnchor="@id/date_input_month"
+            android:completionThreshold="1"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_weight="0.3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Year">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/date_input_year"
+            style="@style/EditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="number"
