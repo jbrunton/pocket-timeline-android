@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:theme="@style/ContinueDialog.CorrectTheme"
+    tools:theme="@style/ContinueDialog.IncorrectTheme"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="@dimen/margin"
-    style="@style/ContinueDialog.Background">
+    style="@style/ContinueDialog.Background"
+    android:padding="@dimen/margin">
 
     <TextView
         android:id="@+id/continue_title"
@@ -25,7 +25,6 @@
         android:text="The answer was 'Pearl Harbor'" />
 
     <Button
-        style="@style/ContinueDialog.Button"
         android:id="@+id/continue_button"
         android:text="Continue"
         android:layout_width="match_parent"
