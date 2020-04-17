@@ -11,4 +11,15 @@
         <item name="submitWidgetLabel">@style/SubmitWidget.Incorrect.Label</item>
         <item name="submitWidgetButton">@style/SubmitWidget.Incorrect.Button</item>
     </style>
+
+    <style name="ContinueDialog.CorrectTheme">
+        <item name="continueDialogBackgroundColor">@color/colorGreenLight</item>
+        <item name="continueDialogTextColor">@color/colorGreen</item>
+        <item name="continueDialogButtonColor">@color/colorGreen</item>
+    </style>
+    <style name="ContinueDialog.IncorrectTheme">
+        <item name="continueDialogBackgroundColor">@color/colorRedLight</item>
+        <item name="continueDialogTextColor">@color/colorRed</item>
+        <item name="continueDialogButtonColor">@color/colorRed</item>
+    </style>
 </resources>

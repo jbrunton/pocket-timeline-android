@@ -4,4 +4,8 @@
     <attr name="submitWidgetTitle" format="reference" />
     <attr name="submitWidgetLabel" format="reference" />
     <attr name="submitWidgetButton" format="reference" />
+
+    <attr name="continueDialogBackgroundColor" format="color" />
+    <attr name="continueDialogTextColor" format="color" />
+    <attr name="continueDialogButtonColor" format="reference" />
 </resources>

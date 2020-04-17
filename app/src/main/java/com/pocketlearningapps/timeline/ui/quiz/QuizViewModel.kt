@@ -142,12 +142,12 @@ class QuizViewModel(
             ContinueDialogState(
                 title = "Correct!",
                 label = null,
-                theme = R.style.SubmitWidget_Correct_Theme)
+                theme = R.style.ContinueDialog_CorrectTheme)
         } else {
             ContinueDialogState(
                 title = "Incorrect. The answer was:",
                 label = question.correctAnswer,
-                theme = R.style.SubmitWidget_Incorrect_Theme
+                theme = R.style.ContinueDialog_IncorrectTheme
             )
         }
         showContinueDialog.postValue(continueDialogState)

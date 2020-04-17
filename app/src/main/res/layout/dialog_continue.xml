@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:theme="@style/SubmitWidget.Incorrect.Theme"
+    tools:theme="@style/ContinueDialog.CorrectTheme"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="@dimen/margin"
-    style="?submitWidgetBackground">
+    style="@style/ContinueDialog.Background">
 
     <TextView
         android:id="@+id/continue_title"
-        style="?submitWidgetTitle"
+        style="@style/ContinueDialog.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -18,14 +18,14 @@
 
     <TextView
         android:id="@+id/continue_label"
-        style="?submitWidgetLabel"
+        style="@style/ContinueDialog.Label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="The answer was 'Pearl Harbor'" />
 
     <Button
-        style="?submitWidgetButton"
+        style="@style/ContinueDialog.Button"
         android:id="@+id/continue_button"
         android:text="Continue"
         android:layout_width="match_parent"

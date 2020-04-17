@@ -50,4 +50,19 @@
         <item name="android:background">@color/colorRedLight</item>
     </style>
 
+    <style name="ContinueDialog" />
+    <style name="ContinueDialog.Background">
+        <item name="android:background">?attr/continueDialogBackgroundColor</item>
+    </style>
+    <style name="ContinueDialog.Title" parent="@style/TextAppearance.MaterialComponents.Headline6">
+        <item name="android:textColor">?attr/continueDialogTextColor</item>
+    </style>
+    <style name="ContinueDialog.Label" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">?attr/continueDialogTextColor</item>
+    </style>
+    <style name="ContinueDialog.Button">
+        <item name="android:backgroundTint">@color/submit_button_color</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
 </resources>
