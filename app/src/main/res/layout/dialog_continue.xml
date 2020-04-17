@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:theme="@style/ContinueDialog.IncorrectTheme"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    style="@style/ContinueDialog.Background"
+    android:padding="@dimen/margin">
+
+    <TextView
+        android:id="@+id/continue_title"
+        style="@style/ContinueDialog.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Incorrect" />
+
+    <TextView
+        android:id="@+id/continue_label"
+        style="@style/ContinueDialog.Label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="The answer was 'Pearl Harbor'" />
+
+    <Button
+        android:id="@+id/continue_button"
+        android:text="Continue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

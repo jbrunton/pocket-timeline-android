@@ -1,8 +1,10 @@
 package com.pocketlearningapps.timeline.ui.quiz
 
+import androidx.annotation.StyleRes
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.DatePart
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Question
@@ -12,6 +14,7 @@ import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.Score
 import com.pocketlearningapps.timeline.network.RetrofitService
 import kotlinx.coroutines.launch
+import java.io.Serializable
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -102,12 +105,12 @@ class QuizViewModel(
 ) : ViewModel() {
     private lateinit var question: Question
     val viewState = MutableLiveData<QuizViewState>()
-    val showAnswerAlert = SingleLiveEvent<String>()
     val showQuizCompleteAlert = SingleLiveEvent<String>()
     val hideKeyboard = SingleLiveAction()
     val focusOnSubmit = SingleLiveAction()
     val focusOnDateInput = SingleLiveAction()
     val initializeDateInput = SingleLiveEvent<WhatDateViewState>()
+    val showContinueDialog = SingleLiveEvent<ContinueDialogState>()
     private lateinit var quiz: Quiz
     private val viewStateFactory = QuizViewStateFactory()
 
@@ -135,13 +138,19 @@ class QuizViewModel(
             is Question.WhatDateQuestion -> whatDateAnswer
             is Question.WhichEventQuestion -> whichEventAnswer
         }
-        viewModelScope.launch {
-            if (quiz.submitAnswer(answer, this@QuizViewModel::submitScore)) {
-                showAnswerAlert.postValue("Correct!")
-            } else {
-                showAnswerAlert.postValue("Incorrect. The answer was ${question.correctAnswer}")
-            }
+        val continueDialogState = if (quiz.submitAnswer(answer, this::submitScore)) {
+            ContinueDialogState(
+                title = "Correct!",
+                label = null,
+                theme = R.style.ContinueDialog_CorrectTheme)
+        } else {
+            ContinueDialogState(
+                title = "Incorrect. The answer was:",
+                label = question.correctAnswer,
+                theme = R.style.ContinueDialog_IncorrectTheme
+            )
         }
+        showContinueDialog.postValue(continueDialogState)
     }
 
     fun onDateChanged(date: LocalDate?) {
@@ -187,7 +196,7 @@ class QuizViewModel(
         }
     }
 
-    fun onAnswerDialogDismissed() {
+    fun onContinuePressed() {
         if (quiz.isComplete) {
             showQuizCompleteAlert.postValue("Quiz complete. You scored ${quiz.percentageScore}%")
         } else {

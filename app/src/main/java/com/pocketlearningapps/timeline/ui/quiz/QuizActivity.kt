@@ -16,12 +16,16 @@ import com.snakydesign.livedataextensions.map
 import kotlinx.android.synthetic.main.activity_quiz.*
 import kotlinx.android.synthetic.main.view_date_input.*
 
-class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
+class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer, ContinueDialog.Listener {
     override val container by lazy { (application as HasContainer).container }
     private val viewModel: QuizViewModel by injectViewModel()
     private val keyboardHelper: KeyboardHelper by inject()
     private val categoryId by lazy { intent.getStringExtra("CATEGORY_ID") }
     private val level by lazy { intent.getIntExtra("LEVEL", 0) }
+
+    override fun onContinuePressed() {
+        viewModel.onContinuePressed()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,6 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close_black_24dp)
 
         viewModel.viewState.distinctUntilChanged().observe(this, Observer { updateViewState(it) })
-        viewModel.showAnswerAlert.observe(this, Observer { showAnswerAlert(it) })
         viewModel.showQuizCompleteAlert.observe(this, Observer { showQuizCompletedAlert(it) })
         viewModel.hideKeyboard.observe(this, Observer { keyboardHelper.hideKeyboard(date_input) })
         viewModel.focusOnSubmit.observe(this, Observer { submit.requestFocus() })
@@ -43,6 +46,9 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         viewModel.viewState.map { it.whichEventContent }
             .distinctUntilChanged()
             .observe(this, Observer { updateWhichEventViewState(it) })
+        viewModel.showContinueDialog.observe(this, Observer {
+            ContinueDialog.build(it).show(supportFragmentManager, "CONTINUE")
+        })
 
         submit.setOnClickListener {
             viewModel.onSubmitClicked(date_input.date, which_event_options.selectedEventId)
@@ -100,13 +106,6 @@ class QuizActivity : AppCompatActivity(R.layout.activity_quiz), HasContainer {
         } else if (viewState.yearEditable) {
             date_input_year.requestFocus()
         }
-    }
-
-    private fun showAnswerAlert(message: String) {
-        MaterialAlertDialogBuilder(this)
-            .setMessage(message)
-            .setPositiveButton("OK", { _, _ -> viewModel.onAnswerDialogDismissed() })
-            .show()
     }
 
     private fun showQuizCompletedAlert(message: String) {

@@ -1,0 +1,24 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="materialButtonStyle">@style/Button</item>
+    </style>
+
+    <style name="AppTheme.Green">
+        <item name="colorPrimary">@color/colorGreen</item>
+    </style>
+
+    <style name="ContinueDialog.CorrectTheme">
+        <item name="android:windowBackground">@color/colorGreenLight</item>
+        <item name="colorPrimary">@color/colorGreen</item>
+    </style>
+
+    <style name="ContinueDialog.IncorrectTheme">
+        <item name="android:windowBackground">@color/colorRedLight</item>
+        <item name="colorPrimary">@color/colorRed</item>
+    </style>
+
+</resources>
