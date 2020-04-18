@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.pocketlearningapps.timeline.R
-import kotlinx.android.synthetic.main.activity_dev_settings.*
 import kotlinx.android.synthetic.main.activity_dev_settings.toolbar
 
 class DevSettingsActivity : AppCompatActivity(R.layout.activity_dev_settings) {

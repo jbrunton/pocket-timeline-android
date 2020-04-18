@@ -5,10 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pocketlearningapps.timeline.R
+import com.pocketlearningapps.timeline.BuildConfig
 import com.pocketlearningapps.timeline.entities.DatePart
 import com.pocketlearningapps.timeline.entities.Event
 import com.pocketlearningapps.timeline.entities.Question
 import com.pocketlearningapps.timeline.entities.Quiz
+import com.pocketlearningapps.timeline.lib.SharedPreferencesAdapter
 import com.pocketlearningapps.timeline.lib.SingleLiveAction
 import com.pocketlearningapps.timeline.lib.SingleLiveEvent
 import com.pocketlearningapps.timeline.network.Score
@@ -101,7 +103,8 @@ class QuizViewStateFactory {
 }
 
 class QuizViewModel(
-    private val service: RetrofitService
+    private val service: RetrofitService,
+    private val preferencesAdapter: SharedPreferencesAdapter
 ) : ViewModel() {
     private lateinit var question: Question
     val viewState = MutableLiveData<QuizViewState>()
@@ -205,8 +208,10 @@ class QuizViewModel(
     }
 
     private fun submitScore(score: Score) {
-        viewModelScope.launch {
-            service.ratingsScore(score)
+        if (!BuildConfig.DEBUG || preferencesAdapter.getBoolean("write_scores")) {
+            viewModelScope.launch {
+                service.ratingsScore(score)
+            }
         }
     }
 }
