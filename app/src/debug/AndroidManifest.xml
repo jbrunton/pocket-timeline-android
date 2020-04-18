@@ -3,6 +3,9 @@
 
     <application
         android:usesCleartextTraffic="true">
+
+        <activity android:name="com.pocketlearningapps.timeline.ui.dev.DevSettingsActivity" />
+
     </application>
 
 </manifest>

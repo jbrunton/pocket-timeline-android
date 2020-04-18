@@ -1,5 +1,6 @@
 package com.pocketlearningapps.timeline.ui.account
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -13,6 +14,7 @@ import com.jbrunton.inject.injectViewModel
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.auth.AuthResultContract
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
+import com.pocketlearningapps.timeline.ui.dev.DevSettingsActivity
 import com.pocketlearningapps.timeline.ui.main.MainViewState
 import kotlinx.android.synthetic.main.fragment_account.*
 
@@ -43,6 +45,11 @@ class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
 
         sign_in.setOnClickListener { viewModel.signInClicked() }
         sign_out.setOnClickListener { viewModel.signOutClicked() }
+        dev_settings.setOnClickListener {
+            Intent(activity, DevSettingsActivity::class.java).apply {
+                startActivity(this)
+            }
+        }
     }
 
     override fun onResume() {
