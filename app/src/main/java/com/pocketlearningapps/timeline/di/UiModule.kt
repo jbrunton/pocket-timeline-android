@@ -6,5 +6,5 @@ import com.pocketlearningapps.timeline.ui.quiz.QuizViewModel
 
 val UiModule = module {
     factory { AccountViewModel(get(), get(), get()) }
-    factory { QuizViewModel(get()) }
+    factory { QuizViewModel(get(), get()) }
 }
