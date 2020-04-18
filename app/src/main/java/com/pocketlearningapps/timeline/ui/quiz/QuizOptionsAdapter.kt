@@ -1,4 +1,4 @@
-package com.pocketlearningapps.timeline.ui.timelines
+package com.pocketlearningapps.timeline.ui.quiz
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +11,8 @@ import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.entities.Category
 import com.pocketlearningapps.timeline.entities.Medal
 import com.pocketlearningapps.timeline.entities.Timeline
+import com.pocketlearningapps.timeline.ui.timelines.TimelineViewHolder
+import com.pocketlearningapps.timeline.ui.timelines.TimelineViewHolderFactory
 
 typealias OnQuizOptionClickHandler = (category: Category, level: Int) -> Unit
 
@@ -24,28 +26,39 @@ class QuizOptionsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         abstract val adapterType: Int
 
         data class Header(val timeline: Timeline) : QuizOptionItem() {
-            override val adapterType = TYPE_HEADER
+            override val adapterType =
+                TYPE_HEADER
         }
 
         data class Item(val category: Category) : QuizOptionItem() {
-            override val adapterType = TYPE_ITEM
+            override val adapterType =
+                TYPE_ITEM
         }
     }
 
 
 
     private val data = mutableListOf<QuizOptionItem>()
-    private val timelineViewHolderFactory = TimelineViewHolderFactory()
+    private val timelineViewHolderFactory =
+        TimelineViewHolderFactory()
 
     var onQuizOptionClicked: OnQuizOptionClickHandler? = null
 
     fun setData(items: Collection<Timeline>) {
         this.data.clear()
         items.forEach { timeline ->
-            this.data.add(QuizOptionItem.Header(timeline))
+            this.data.add(
+                QuizOptionItem.Header(
+                    timeline
+                )
+            )
             val categories = timeline.categories
             if (categories != null) {
-                this.data.addAll(categories.map { QuizOptionItem.Item(it) })
+                this.data.addAll(categories.map {
+                    QuizOptionItem.Item(
+                        it
+                    )
+                })
             }
         }
         notifyDataSetChanged()
