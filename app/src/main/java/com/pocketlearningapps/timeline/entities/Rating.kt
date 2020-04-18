@@ -4,6 +4,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.google.gson.annotations.SerializedName
 import com.pocketlearningapps.timeline.R
+import java.io.Serializable
 import kotlin.math.max
 
 enum class Medal(@ColorRes val color: Int, @DrawableRes val background: Int) {
@@ -26,12 +27,12 @@ data class Rating(
     val level: Int,
     @SerializedName("normalized_score") val normalizedScore: Float?,
     val unlocked: Boolean
-) {
+) : Serializable {
     val gpa: Float? get() {
         return normalizedScore?.let { it * 5 }
     }
 
-    val gpaString: String get() {
-        return "GPA " + (gpa?.let { "%.1f".format(it) } ?: "-")
+    val gpaString: String? get() {
+        return gpa?.let { "GPA %.1f".format(it) }
     }
 }
