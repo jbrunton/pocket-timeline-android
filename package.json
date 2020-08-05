@@ -8,6 +8,6 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.63.2",
-    "test-react-component": "github:jbrunton/test-react-component"
+    "TestReactComponentJS": "github:jbrunton/TestReactComponentJS"
   }
 }

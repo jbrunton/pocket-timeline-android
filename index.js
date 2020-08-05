@@ -5,7 +5,7 @@ import {
   Text,
   View
 } from 'react-native';
-import { message } from 'test-react-component'
+import { FibApp } from 'TestReactComponentJS/App'
 
 class HelloWorld extends React.Component {
   render() {
@@ -30,5 +30,5 @@ var styles = StyleSheet.create({
 
 AppRegistry.registerComponent(
   'MyReactNativeApp',
-  () => HelloWorld
+  () => FibApp
 );
