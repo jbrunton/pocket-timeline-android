@@ -5,12 +5,13 @@ import {
   Text,
   View
 } from 'react-native';
+import { message } from 'test-react-component'
 
 class HelloWorld extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.hello}>Hello, World</Text>
+        <Text style={styles.hello}>{message}</Text>
       </View>
     );
   }
