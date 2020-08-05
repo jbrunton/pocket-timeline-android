@@ -44,15 +44,7 @@ android {
     }
 }
 
-
-project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
-]
-
 apply from: "../../node_modules/react-native/react.gradle"
-
-def jscFlavor = 'org.webkit:android-jsc:+'
-def enableHermes = project.ext.react.get("enableHermes", false);
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -77,13 +69,7 @@ dependencies {
     implementation 'androidx.preference:preference:1.1.1'
 
     implementation "com.facebook.react:react-native:+" // From node_modules
-    if (enableHermes) {
-        def hermesPath = "../../node_modules/hermes-engine/android/";
-        debugImplementation files(hermesPath + "hermes-debug.aar")
-        releaseImplementation files(hermesPath + "hermes-release.aar")
-    } else {
-        implementation jscFlavor
-    }
+    implementation 'org.webkit:android-jsc:+'
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
