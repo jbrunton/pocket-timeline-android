@@ -8,6 +8,6 @@
   "dependencies": {
     "react": "16.13.1",
     "react-native": "0.63.2",
-    "TestReactComponentJS": "github:jbrunton/TestReactComponentJS#use-typescript"
+    "TestReactComponentJS": "github:jbrunton/TestReactComponentJS#62b2191213a7f4ea942a7b8a05db57e55c5f9b8e"
   }
 }
