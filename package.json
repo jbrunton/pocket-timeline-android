@@ -9,7 +9,6 @@
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/native": "^5.7.3",
     "@react-navigation/stack": "^5.9.0",
-    "TestReactComponentJS": "github:jbrunton/TestReactComponentJS#62b2191213a7f4ea942a7b8a05db57e55c5f9b8e",
     "react": "16.13.1",
     "react-native": "0.63.2",
     "react-native-gesture-handler": "^1.7.0",
