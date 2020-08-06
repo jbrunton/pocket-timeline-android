@@ -47,6 +47,7 @@ android {
 apply from: "../../node_modules/react-native/react.gradle"
 
 dependencies {
+    implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
