@@ -9,21 +9,11 @@ import com.jbrunton.inject.Container
 import com.jbrunton.inject.HasContainer
 import com.pocketlearningapps.timeline.di.ApplicationComponent
 
-class PocketTimelineApplication : Application(), HasContainer, ReactApplication {
+class PocketTimelineApplication : Application(), HasContainer {
     override val container: Container = Container()
 
     override fun onCreate() {
         super.onCreate()
         container.register(ApplicationComponent(this))
-    }
-
-    override fun getReactNativeHost(): ReactNativeHost {
-        return object : ReactNativeHost(this) {
-            override fun getPackages(): MutableList<ReactPackage> = mutableListOf(
-                MainReactPackage()
-            )
-
-            override fun getUseDeveloperSupport() = BuildConfig.DEBUG
-        }
     }
 }
