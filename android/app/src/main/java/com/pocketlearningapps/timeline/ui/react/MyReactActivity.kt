@@ -5,7 +5,6 @@ import com.facebook.react.common.LifecycleState
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.facebook.react.shell.MainReactPackage
 import com.pocketlearningapps.timeline.BuildConfig
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage
 
 
 class MyReactActivity : ReactActivity(), DefaultHardwareBackBtnHandler {
@@ -26,10 +25,7 @@ class MyReactActivity : ReactActivity(), DefaultHardwareBackBtnHandler {
 
             override fun getReactNativeHost(): ReactNativeHost {
                 return object : ReactNativeHost(application) {
-                    override fun getPackages(): MutableList<ReactPackage> = mutableListOf(
-                        MainReactPackage(),
-                        RNGestureHandlerPackage()
-                    )
+                    override fun getPackages() = PackageList(this).packages
 
                     override fun getUseDeveloperSupport() = BuildConfig.DEBUG
 
