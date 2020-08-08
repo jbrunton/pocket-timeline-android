@@ -44,7 +44,7 @@ android {
     }
 }
 
-apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../node_modules/react-native/react.gradle"
 
 dependencies {
     implementation project(':react-native-gesture-handler')
@@ -80,4 +80,4 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     }
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
