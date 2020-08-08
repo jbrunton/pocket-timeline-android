@@ -24,6 +24,11 @@
         <activity android:name=".ui.timelines.TimelineActivity" />
         <activity android:name=".ui.quiz.QuizActivity"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.react.MyReactActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
 
     </application>
 

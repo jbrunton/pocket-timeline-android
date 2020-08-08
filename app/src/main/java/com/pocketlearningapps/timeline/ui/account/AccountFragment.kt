@@ -16,6 +16,8 @@ import com.pocketlearningapps.timeline.auth.AuthResultContract
 import com.pocketlearningapps.timeline.auth.GoogleSignInAdapter
 import com.pocketlearningapps.timeline.ui.dev.DevSettingsActivity
 import com.pocketlearningapps.timeline.ui.main.MainViewState
+import com.pocketlearningapps.timeline.ui.react.MyReactActivity
+import com.pocketlearningapps.timeline.ui.timelines.TimelineActivity
 import kotlinx.android.synthetic.main.fragment_account.*
 
 class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
@@ -45,6 +47,10 @@ class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
 
         sign_in.setOnClickListener { viewModel.signInClicked() }
         sign_out.setOnClickListener { viewModel.signOutClicked() }
+        start_react.setOnClickListener {
+            val intent = Intent(requireContext(), MyReactActivity::class.java)
+            requireContext().startActivity(intent)
+        }
         dev_settings.setOnClickListener {
             Intent(activity, DevSettingsActivity::class.java).apply {
                 startActivity(this)
