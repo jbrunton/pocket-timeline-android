@@ -34,6 +34,6 @@ export default TimelineApp = () => {
 };
 
 AppRegistry.registerComponent(
-  'MyReactNativeApp',
+  'ReactTest',
   () => TimelineApp
 );

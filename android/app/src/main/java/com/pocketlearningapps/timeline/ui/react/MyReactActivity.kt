@@ -8,7 +8,7 @@ import com.pocketlearningapps.timeline.BuildConfig
 
 
 class MyReactActivity : ReactActivity(), DefaultHardwareBackBtnHandler {
-    override fun getMainComponentName() = "MyReactNativeApp"
+    override fun getMainComponentName() = "ReactTest"
 
     override fun createReactActivityDelegate(): ReactActivityDelegate {
         return object : ReactActivityDelegate(this, mainComponentName) {
