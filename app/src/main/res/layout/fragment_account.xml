@@ -40,14 +40,21 @@
             android:layout_centerVertical="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@id/dev_settings"/>
+            android:layout_above="@id/start_react"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign Out"
-            android:layout_above="@id/dev_settings"
+            android:layout_above="@id/start_react"
             android:id="@+id/sign_out"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Start React"
+            android:layout_above="@id/dev_settings"
+            android:id="@+id/start_react"/>
 
         <Button
             android:id="@+id/dev_settings"
