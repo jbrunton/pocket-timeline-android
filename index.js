@@ -7,25 +7,27 @@ import {TimelineScreen} from 'PocketTimelineReact';
 
 const Stack = createStackNavigator();
 
-const HomeScreen = ({ navigation }) => {
-  return (
-    <Button
-      title="Show Timeline"
-      onPress={() =>
-        navigation.navigate('TimelineScreen', { timelineId: "1" })
-      }
-    />
-  );
-};
-
-export default TimelineApp = () => {
+export default TimelineApp = (props) => {
+  console.log("props: " + JSON.stringify(props))
+  const HomeScreen = ({ navigation }) => {
+    return (
+      <Button
+        title="Show Timeline"
+        onPress={() =>
+          navigation.navigate('TimelineScreen', { timelineId: props.timeline_id })
+        }
+      />
+    );
+  };
+  
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator props={props}>
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: 'Welcome' }}
+          props={props}
+          options={{ title: props.timeline_title }}
         />
         <Stack.Screen name="TimelineScreen" component={TimelineScreen} />
       </Stack.Navigator>
@@ -33,7 +35,11 @@ export default TimelineApp = () => {
   );
 };
 
-AppRegistry.registerComponent(
-  'ReactTest',
-  () => TimelineApp
-);
+function Welcome(props) {
+  return <Text>Hello, {props.AUDIENCE}!</Text>;
+}
+
+AppRegistry.registerComponent('ReactTest', () => TimelineApp);
+
+
+//AppRegistry.registerComponent('ReactTest', () => Welcome)
