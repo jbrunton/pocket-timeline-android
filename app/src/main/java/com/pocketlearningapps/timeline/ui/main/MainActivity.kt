@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.pocketlearningapps.timeline.R
 import com.pocketlearningapps.timeline.ui.account.AccountFragment
@@ -12,7 +13,7 @@ import com.pocketlearningapps.timeline.ui.timelines.TimelinesFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(R.layout.activity_main),
-    BottomNavigationView.OnNavigationItemSelectedListener
+    BottomNavigationView.OnNavigationItemSelectedListener, DefaultHardwareBackBtnHandler
 {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
                 true
             }
             R.id.navigation_timelines -> {
-                showFragment(TimelinesFragment())
+                showFragment(TimelinesFragment.newInstance("ReactTest", Bundle()))
                 true
             }
             R.id.navigation_account -> {
@@ -45,5 +46,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
         supportFragmentManager.beginTransaction()
             .replace(R.id.content, fragment)
             .commit()
+    }
+
+    override fun invokeDefaultOnBackPressed() {
+
     }
 }
