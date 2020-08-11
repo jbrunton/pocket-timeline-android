@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main),
                 true
             }
             R.id.navigation_timelines -> {
-                showFragment(TimelinesFragment.newInstance("ReactTest", Bundle()))
+                showFragment(TimelinesFragment())
                 true
             }
             R.id.navigation_account -> {
