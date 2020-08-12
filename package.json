@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start"
+    "start": "react-native start",
+    "android": "react-native run-android --main-activity ui.main.MainActivity"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
