@@ -49,6 +49,8 @@ class AccountFragment : Fragment(R.layout.fragment_account), HasContainer {
         sign_out.setOnClickListener { viewModel.signOutClicked() }
         start_react.setOnClickListener {
             val intent = Intent(requireContext(), MyReactActivity::class.java)
+            intent.putExtra("timeline_id", "1")
+            intent.putExtra("timeline_title", "World War 2")
             requireContext().startActivity(intent)
         }
         dev_settings.setOnClickListener {

@@ -14,10 +14,21 @@
         android:elevation="4dp"
         app:title="@string/nav_title_timelines" />
 
-    <androidx.recyclerview.widget.RecyclerView
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/margin"-->
+<!--        android:id="@+id/timelines" />-->
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/timelines"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content" />-->
+
+    <androidx.fragment.app.FragmentContainerView
+        android:name="com.pocketlearningapps.timeline.ui.timelines.TimelinesReactFragment"
+        android:id="@+id/timelines_react_fragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin"
-        android:id="@+id/timelines" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

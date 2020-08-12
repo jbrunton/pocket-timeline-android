@@ -1,5 +1,6 @@
 package com.pocketlearningapps.timeline.ui.react
 
+import android.os.Bundle
 import com.facebook.react.*
 import com.facebook.react.common.LifecycleState
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler
@@ -21,6 +22,13 @@ class MyReactActivity : ReactActivity(), DefaultHardwareBackBtnHandler {
                     .setUseDeveloperSupport(BuildConfig.DEBUG)
                     .setInitialLifecycleState(LifecycleState.RESUMED)
                     .build()
+            }
+
+            override fun getLaunchOptions(): Bundle? {
+                val options = Bundle()
+                options.putString("timeline_id", intent.getStringExtra("timeline_id"))
+                options.putString("timeline_title", intent.getStringExtra("timeline_title"))
+                return options
             }
 
             override fun getReactNativeHost(): ReactNativeHost {
